@@ -23,16 +23,27 @@
       this.data = null;
       this.title = title;
       this.evDispatch = evDispatch;
+      this.curregion = "headquarters";
     }
 
-    DifferenceChart.prototype.draw = function(region, data) {
+    DifferenceChart.prototype.draw = function(region, data, start_time, end_time) {
       var area, dateFormat, legend, line, svg, x, xAxis, y, yAxis, zoom;
       if (region == null) {
-        region = "headquarters";
+        region = null;
       }
       if (data == null) {
         data = null;
       }
+      if (start_time == null) {
+        start_time = null;
+      }
+      if (end_time == null) {
+        end_time = null;
+      }
+      if (region === null) {
+        region = this.curregion;
+      }
+      this.curregion = region;
       data = data === null ? this.data : data;
       this.data = data;
       dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
@@ -41,11 +52,23 @@
           return d.businessunit === region;
         };
       })(this));
-      data.forEach(function(d) {
-        d.timestamp = dateFormat.parse(d.healthtime);
-        d.expected = +d.expected;
-        return d.reported = +d.reported;
-      });
+      data.forEach((function(_this) {
+        return function(d) {
+          d.timestamp = dateFormat.parse(d.healthtime);
+          d.expected = +d.expected;
+          return d.reported = +d.reported;
+        };
+      })(this));
+      data = data.filter((function(_this) {
+        return function(d) {
+          var _ref;
+          if (start_time !== null && end_time !== null) {
+            return (start_time <= (_ref = d.timestamp) && _ref <= end_time);
+          } else {
+            return true;
+          }
+        };
+      })(this));
       x = d3.time.scale().range([0, this.width]);
       y = d3.scale.linear().range([this.height, 0]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
@@ -142,16 +165,27 @@
       this.data = null;
       this.title = title;
       this.evDispatch = evDispatch;
+      this.curregion = "headquarters";
     }
 
-    MultiLineChart.prototype.draw = function(region, data) {
+    MultiLineChart.prototype.draw = function(region, data, start_time, end_time) {
       var dateFormat, legend, line, svg, x, xAxis, y, yAxis;
       if (region == null) {
-        region = "headquarters";
+        region = null;
       }
       if (data == null) {
         data = null;
       }
+      if (start_time == null) {
+        start_time = null;
+      }
+      if (end_time == null) {
+        end_time = null;
+      }
+      if (region === null) {
+        region = this.curregion;
+      }
+      this.curregion = region;
       data = data === null ? this.data : data;
       this.data = data;
       dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
@@ -165,6 +199,16 @@
         d.expected = +d.expected;
         return d.reported = +d.reported;
       });
+      data = data.filter((function(_this) {
+        return function(d) {
+          var _ref;
+          if (start_time !== null && end_time !== null) {
+            return (start_time <= (_ref = d.timestamp) && _ref <= end_time);
+          } else {
+            return true;
+          }
+        };
+      })(this));
       x = d3.time.scale().range([0, this.width]);
       y = d3.scale.linear().range([this.height, 0]);
       xAxis = d3.svg.axis().scale(x).orient("bottom");
@@ -247,33 +291,6 @@
             return _this.evDispatch.selectRegion(d.businessunit);
           });
           return d3.select(self.frameElement).style("height", _this.height + "px");
-        };
-      })(this));
-    };
-
-    BWMap.prototype.virusSpread = function() {
-      return d3.csv('/static/csv/policy5_status.csv').get((function(_this) {
-        return function(error, virusdata) {
-          var dateFormat;
-          dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-          virusdata.forEach(function(d) {
-            return d.timestamp = dateFormat.parse(d.healthtime);
-          });
-          return virusdata.forEach(function(vd) {
-            var data;
-            if (+vd.numipaddr > 0) {
-              data = _this.svg.select("#bu_" + vd.businessunit).datum();
-              return _this.svg.selectAll("circle").data([1]).enter().append("circle").attr({
-                cx: function(d) {
-                  return data.x1 + data.width / 2 + d;
-                },
-                cy: function(d) {
-                  return data.y1 + data.height / 2 + d;
-                },
-                r: 2
-              }).style("fill", "steelblue");
-            }
-          });
         };
       })(this));
     };
@@ -585,7 +602,6 @@
     BWDashboard.prototype.setupPlots = function() {
       this.bw_map_selector = new BWMap(400, 300, "#bw_map_selector", this.evdispatch);
       this.bw_map_selector.draw();
-      this.bw_map_selector.virusSpread();
       this.bw_ws_reported_chart = new DifferenceChart(560, 200, "#bw_ws_reported_chart", "Expected vs Reported Workstations");
       this.bw_server_reported_chart = new DifferenceChart(560, 200, "#bw_server_reported_chart", "Expected vs Reported Servers");
       this.bw_atm_reported_chart = new DifferenceChart(560, 200, "#bw_atm_reported_chart", "Expected vs Reported ATM");
@@ -594,9 +610,19 @@
           return _this.bw_ws_reported_chart.draw(region);
         };
       })(this));
+      this.evdispatch.on("selectTime.ws", (function(_this) {
+        return function(start, end) {
+          return _this.bw_ws_reported_chart.draw(null, null, start, end);
+        };
+      })(this));
       this.evdispatch.on("selectRegion.server", (function(_this) {
         return function(region) {
           return _this.bw_server_reported_chart.draw(region);
+        };
+      })(this));
+      this.evdispatch.on("selectTime.server", (function(_this) {
+        return function(start, end) {
+          return _this.bw_server_reported_chart.draw(null, null, start, end);
         };
       })(this));
       this.evdispatch.on("selectRegion.atm", (function(_this) {
@@ -604,10 +630,20 @@
           return _this.bw_atm_reported_chart.draw(region);
         };
       })(this));
+      this.evdispatch.on("selectTime.atm", (function(_this) {
+        return function(start, end) {
+          return _this.bw_atm_reported_chart.draw(null, null, start, end);
+        };
+      })(this));
       this.bw_conn_chart = new MultiLineChart(560, 200, "#bw_conn_chart", "Num Connections");
       this.evdispatch.on("selectRegion.bwconn", (function(_this) {
         return function(region) {
           return _this.bw_conn_chart.draw(region);
+        };
+      })(this));
+      this.evdispatch.on("selectTime.bwconn", (function(_this) {
+        return function(start, end) {
+          return _this.bw_conn_chart.draw(null, null, start, end);
         };
       })(this));
       this.bw_activity_chart = new MultiTimeSeriesChart(560, 200, "#bw_activity_chart", "Activity Flag", this.evdispatch);
@@ -628,16 +664,19 @@
         max: 192,
         step: 1,
         values: [0, 192],
-        slide: function(event, ui) {
-          var dateFormat, end_date, start_date;
-          dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-          start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0] * 60000 * 15);
-          end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
-          $("#start_time").text(start_date.toString());
-          $("#end_time").text(end_date.toString());
-          console.log(start_date.toString());
-          return console.log(end_date.toString());
-        }
+        slide: (function(_this) {
+          return function(event, ui) {
+            var dateFormat, end_date, start_date;
+            dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+            start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0] * 60000 * 15);
+            end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
+            $("#start_time").text(start_date.toString());
+            $("#end_time").text(end_date.toString());
+            _this.evdispatch.selectTime(start_date, end_date);
+            console.log(start_date.toString());
+            return console.log(end_date.toString());
+          };
+        })(this)
       });
     };
 

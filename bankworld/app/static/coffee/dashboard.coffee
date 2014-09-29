@@ -9,16 +9,32 @@ class DifferenceChart
     @data = null
     @title = title
     @evDispatch = evDispatch
+    @curregion = "headquarters"
 
-  draw: (region="headquarters", data=null) ->
+  draw: (region=null, data=null, start_time=null, end_time=null) ->
+    if region is null
+      region = @curregion
+
+    @curregion = region
+
     data = if data is null then @data else data
     @data = data
     dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
-    data = data.filter( (d) => d.businessunit == region)
-    data.forEach( (d) ->
+
+    data = data.filter( (d) => d.businessunit == region )
+
+    data.forEach( (d) =>
       d.timestamp = dateFormat.parse(d.healthtime)
       d.expected = +d.expected
-      d.reported = +d.reported)
+      d.reported = +d.reported
+    )
+
+    data = data.filter( (d) =>
+      if start_time != null and end_time != null
+        start_time <= d.timestamp <= end_time
+      else
+        true
+    )
 
     x = d3.time.scale().range([0,@width])
     y = d3.scale.linear().range([@height,0])
@@ -122,8 +138,13 @@ class MultiLineChart
     @data = null
     @title = title
     @evDispatch = evDispatch
+    @curregion = "headquarters"
 
-  draw: (region="headquarters", data=null) ->
+  draw: (region=null, data=null, start_time=null, end_time=null) ->
+    if region is null
+      region = @curregion
+
+    @curregion = region
     data = if data is null then @data else data
     @data = data
     dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
@@ -132,6 +153,13 @@ class MultiLineChart
       d.timestamp = dateFormat.parse(d.healthtime)
       d.expected = +d.expected
       d.reported = +d.reported
+    )
+
+    data = data.filter( (d) =>
+      if start_time != null and end_time != null
+        start_time <= d.timestamp <= end_time
+      else
+        true
     )
 
     x = d3.time.scale().range([0,@width])
@@ -220,24 +248,6 @@ class BWMap
         @evDispatch.selectRegion(d.businessunit))
 
       d3.select(self.frameElement).style("height", @height + "px")
-    )
-  virusSpread: ->
-    d3.csv('/static/csv/policy5_status.csv').get((error,virusdata) =>
-      dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
-      virusdata.forEach( (d) =>
-        d.timestamp = dateFormat.parse(d.healthtime)
-      )
-
-      virusdata.forEach( (vd) =>
-        if +vd.numipaddr > 0
-          data = @svg.select("#bu_"+vd.businessunit).datum()
-          @svg.selectAll("circle").data([1]).enter().append("circle").attr(
-            cx: (d) => data.x1 + data.width/2 + d
-            cy: (d) => data.y1 + data.height/2 + d
-            r: 2
-          ).style("fill","steelblue")
-      )
-
     )
 
 class BWSpreadMap
@@ -466,18 +476,23 @@ class BWDashboard
   setupPlots: ->
     @bw_map_selector = new BWMap(400,300,"#bw_map_selector",@evdispatch)
     @bw_map_selector.draw()
-    @bw_map_selector.virusSpread()
 
     @bw_ws_reported_chart = new DifferenceChart(560,200,"#bw_ws_reported_chart", "Expected vs Reported Workstations")
     @bw_server_reported_chart = new DifferenceChart(560,200,"#bw_server_reported_chart", "Expected vs Reported Servers")
     @bw_atm_reported_chart = new DifferenceChart(560,200,"#bw_atm_reported_chart", "Expected vs Reported ATM")
-    @evdispatch.on("selectRegion.ws", (region) =>
-      @bw_ws_reported_chart.draw(region))
+
+    @evdispatch.on("selectRegion.ws", (region) => @bw_ws_reported_chart.draw(region))
+    @evdispatch.on("selectTime.ws", (start,end) => @bw_ws_reported_chart.draw(null, null,start,end))
+
     @evdispatch.on("selectRegion.server", (region) => @bw_server_reported_chart.draw(region))
+    @evdispatch.on("selectTime.server", (start,end) => @bw_server_reported_chart.draw(null, null,start,end))
+
     @evdispatch.on("selectRegion.atm", (region) => @bw_atm_reported_chart.draw(region))
+    @evdispatch.on("selectTime.atm", (start,end) => @bw_atm_reported_chart.draw(null, null,start,end))
 
     @bw_conn_chart = new MultiLineChart(560,200,"#bw_conn_chart", "Num Connections")
     @evdispatch.on("selectRegion.bwconn", (region) => @bw_conn_chart.draw(region))
+    @evdispatch.on("selectTime.bwconn", (start,end) => @bw_conn_chart.draw(null, null,start,end))
 
     @bw_activity_chart = new MultiTimeSeriesChart(560,200,"#bw_activity_chart","Activity Flag",@evdispatch)
     @evdispatch.on("selectRegion.activity", (region) => @bw_activity_chart.draw(region))
@@ -491,12 +506,13 @@ class BWDashboard
       max: 192,
       step: 1,
       values: [ 0,192 ],
-      slide: ( event, ui ) ->
+      slide: ( event, ui ) =>
         dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
         start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0]*60000*15)
         end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1])*60000*15)
         $("#start_time").text(start_date.toString())
         $("#end_time").text(end_date.toString())
+        @evdispatch.selectTime(start_date, end_date)
         console.log(start_date.toString())
         console.log(end_date.toString())
     )
