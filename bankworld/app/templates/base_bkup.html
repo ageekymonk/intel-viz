@@ -1,0 +1,410 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>sandbox</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="/static/styles/main.css">
+    <link rel="stylesheet" href="/static/styles/dc.css">
+    <!-- endbuild -->
+</head>
+<body>
+<!--[if lt IE 10]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="/static/js/jquery/dist/jquery.js"></script>
+<script src="/static/js/d3/d3.min.js"></script>
+<script src="/static/js/dc.js"></script>
+<script src="/static/js/crossfilter.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-XXXXX-X');ga('send','pageview');
+</script>
+
+
+
+<div class="row">
+    <form id="bwdashform">
+        <div class="col-lg-12">
+            <div class="input-group">
+                  <span class="input-group-addon" >
+                    Select the Region
+                    <select name="region" id="region">
+                        <option value="0">Headquarters</option>
+                        <option value="1">region-1</option>
+                        <option value="2">region-2</option>
+                        <option value="3">region-3</option>
+                        <option value="4">region-4</option>
+                        <option value="5">region-5</option>
+                        <option value="6">region-6</option>
+                        <option value="7">region-7</option>
+                        <option value="8">region-8</option>
+                        <option value="9">region-9</option>
+                        <option value="10">region-10</option>
+                        <option value="11">region-11</option>
+                        <option value="12">region-12</option>
+                        <option value="13">region-13</option>
+                        <option value="14">region-14</option>
+                        <option value="15">region-15</option>
+                        <option value="16">region-16</option>
+                        <option value="17">region-17</option>
+                        <option value="18">region-18</option>
+                        <option value="19">region-19</option>
+                        <option value="20">region-20</option>
+                        <option value="21">region-21</option>
+                        <option value="22">region-22</option>
+                        <option value="23">region-23</option>
+                        <option value="24">region-24</option>
+                        <option value="25">region-25</option>
+                        <option value="26">region-26</option>
+                        <option value="27">region-27</option>
+                        <option value="28">region-28</option>
+                        <option value="29">region-29</option>
+                        <option value="30">region-30</option>
+                        <option value="31">region-31</option>
+                        <option value="32">region-32</option>
+                        <option value="33">region-33</option>
+                        <option value="34">region-34</option>
+                        <option value="35">region-35</option>
+                        <option value="36">region-36</option>
+                        <option value="37">region-37</option>
+                        <option value="38">region-38</option>
+                        <option value="39">region-39</option>
+                        <option value="40">region-40</option>
+                        <option value="41">region-41</option>
+                        <option value="42">region-42</option>
+                        <option value="43">region-43</option>
+                        <option value="44">region-44</option>
+                        <option value="45">region-45</option>
+                        <option value="46">region-46</option>
+                        <option value="47">region-47</option>
+                        <option value="48">region-48</option>
+                        <option value="49">region-49</option>
+                        <option value="50">region-50</option>
+                    </select>
+                  </span>
+
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="input-group">
+                  <span class="input-group-addon">
+                    Select the branch
+                    <select name="branch" id="branch">
+                    <option value="ignore">ignore</option>
+                    <option value="headquarters">headquarters</option>
+                    <option value="datacenter-1">datacenter-1</option>
+                    <option value="datacenter-2">datacenter-2</option>
+                    <option value="datacenter-3">datacenter-3</option>
+                    <option value="datacenter-4">datacenter-4</option>
+                    <option value="datacenter-5">datacenter-5</option>
+                    <option value="branch1">branch1</option>
+                    <option value="branch2">branch2</option>
+                    <option value="branch3">branch3</option>
+                    <option value="branch4">branch4</option>
+                    <option value="branch5">branch5</option>
+                    <option value="branch6">branch6</option>
+                    <option value="branch7">branch7</option>
+                    <option value="branch8">branch8</option>
+                    <option value="branch9">branch9</option>
+                    <option value="branch10">branch10</option>
+                    <option value="branch11">branch11</option>
+                    <option value="branch12">branch12</option>
+                    <option value="branch13">branch13</option>
+                    <option value="branch14">branch14</option>
+                    <option value="branch15">branch15</option>
+                    <option value="branch16">branch16</option>
+                    <option value="branch17">branch17</option>
+                    <option value="branch18">branch18</option>
+                    <option value="branch19">branch19</option>
+                    <option value="branch20">branch20</option>
+                    <option value="branch21">branch21</option>
+                    <option value="branch22">branch22</option>
+                    <option value="branch23">branch23</option>
+                    <option value="branch24">branch24</option>
+                    <option value="branch25">branch25</option>
+                    <option value="branch26">branch26</option>
+                    <option value="branch27">branch27</option>
+                    <option value="branch28">branch28</option>
+                    <option value="branch29">branch29</option>
+                    <option value="branch30">branch30</option>
+                    <option value="branch31">branch31</option>
+                    <option value="branch32">branch32</option>
+                    <option value="branch33">branch33</option>
+                    <option value="branch34">branch34</option>
+                    <option value="branch35">branch35</option>
+                    <option value="branch36">branch36</option>
+                    <option value="branch37">branch37</option>
+                    <option value="branch38">branch38</option>
+                    <option value="branch39">branch39</option>
+                    <option value="branch40">branch40</option>
+                    <option value="branch41">branch41</option>
+                    <option value="branch42">branch42</option>
+                    <option value="branch43">branch43</option>
+                    <option value="branch44">branch44</option>
+                    <option value="branch45">branch45</option>
+                    <option value="branch46">branch46</option>
+                    <option value="branch47">branch47</option>
+                    <option value="branch48">branch48</option>
+                    <option value="branch49">branch49</option>
+                    <option value="branch50">branch50</option>
+                    <option value="branch51">branch51</option>
+                    <option value="branch52">branch52</option>
+                    <option value="branch53">branch53</option>
+                    <option value="branch54">branch54</option>
+                    <option value="branch55">branch55</option>
+                    <option value="branch56">branch56</option>
+                    <option value="branch57">branch57</option>
+                    <option value="branch58">branch58</option>
+                    <option value="branch59">branch59</option>
+                    <option value="branch60">branch60</option>
+                    <option value="branch61">branch61</option>
+                    <option value="branch62">branch62</option>
+                    <option value="branch63">branch63</option>
+                    <option value="branch64">branch64</option>
+                    <option value="branch65">branch65</option>
+                    <option value="branch66">branch66</option>
+                    <option value="branch67">branch67</option>
+                    <option value="branch68">branch68</option>
+                    <option value="branch69">branch69</option>
+                    <option value="branch70">branch70</option>
+                    <option value="branch71">branch71</option>
+                    <option value="branch72">branch72</option>
+                    <option value="branch73">branch73</option>
+                    <option value="branch74">branch74</option>
+                    <option value="branch75">branch75</option>
+                    <option value="branch76">branch76</option>
+                    <option value="branch77">branch77</option>
+                    <option value="branch78">branch78</option>
+                    <option value="branch79">branch79</option>
+                    <option value="branch80">branch80</option>
+                    <option value="branch81">branch81</option>
+                    <option value="branch82">branch82</option>
+                    <option value="branch83">branch83</option>
+                    <option value="branch84">branch84</option>
+                    <option value="branch85">branch85</option>
+                    <option value="branch86">branch86</option>
+                    <option value="branch87">branch87</option>
+                    <option value="branch88">branch88</option>
+                    <option value="branch89">branch89</option>
+                    <option value="branch90">branch90</option>
+                    <option value="branch91">branch91</option>
+                    <option value="branch92">branch92</option>
+                    <option value="branch93">branch93</option>
+                    <option value="branch94">branch94</option>
+                    <option value="branch95">branch95</option>
+                    <option value="branch96">branch96</option>
+                    <option value="branch97">branch97</option>
+                    <option value="branch98">branch98</option>
+                    <option value="branch99">branch99</option>
+                    <option value="branch100">branch100</option>
+                    <option value="branch101">branch101</option>
+                    <option value="branch102">branch102</option>
+                    <option value="branch103">branch103</option>
+                    <option value="branch104">branch104</option>
+                    <option value="branch105">branch105</option>
+                    <option value="branch106">branch106</option>
+                    <option value="branch107">branch107</option>
+                    <option value="branch108">branch108</option>
+                    <option value="branch109">branch109</option>
+                    <option value="branch110">branch110</option>
+                    <option value="branch111">branch111</option>
+                    <option value="branch112">branch112</option>
+                    <option value="branch113">branch113</option>
+                    <option value="branch114">branch114</option>
+                    <option value="branch115">branch115</option>
+                    <option value="branch116">branch116</option>
+                    <option value="branch117">branch117</option>
+                    <option value="branch118">branch118</option>
+                    <option value="branch119">branch119</option>
+                    <option value="branch120">branch120</option>
+                    <option value="branch121">branch121</option>
+                    <option value="branch122">branch122</option>
+                    <option value="branch123">branch123</option>
+                    <option value="branch124">branch124</option>
+                    <option value="branch125">branch125</option>
+                    <option value="branch126">branch126</option>
+                    <option value="branch127">branch127</option>
+                    <option value="branch128">branch128</option>
+                    <option value="branch129">branch129</option>
+                    <option value="branch130">branch130</option>
+                    <option value="branch131">branch131</option>
+                    <option value="branch132">branch132</option>
+                    <option value="branch133">branch133</option>
+                    <option value="branch134">branch134</option>
+                    <option value="branch135">branch135</option>
+                    <option value="branch136">branch136</option>
+                    <option value="branch137">branch137</option>
+                    <option value="branch138">branch138</option>
+                    <option value="branch139">branch139</option>
+                    <option value="branch140">branch140</option>
+                    <option value="branch141">branch141</option>
+                    <option value="branch142">branch142</option>
+                    <option value="branch143">branch143</option>
+                    <option value="branch144">branch144</option>
+                    <option value="branch145">branch145</option>
+                    <option value="branch146">branch146</option>
+                    <option value="branch147">branch147</option>
+                    <option value="branch148">branch148</option>
+                    <option value="branch149">branch149</option>
+                    <option value="branch150">branch150</option>
+                    <option value="branch151">branch151</option>
+                    <option value="branch152">branch152</option>
+                    <option value="branch153">branch153</option>
+                    <option value="branch154">branch154</option>
+                    <option value="branch155">branch155</option>
+                    <option value="branch156">branch156</option>
+                    <option value="branch157">branch157</option>
+                    <option value="branch158">branch158</option>
+                    <option value="branch159">branch159</option>
+                    <option value="branch160">branch160</option>
+                    <option value="branch161">branch161</option>
+                    <option value="branch162">branch162</option>
+                    <option value="branch163">branch163</option>
+                    <option value="branch164">branch164</option>
+                    <option value="branch165">branch165</option>
+                    <option value="branch166">branch166</option>
+                    <option value="branch167">branch167</option>
+                    <option value="branch168">branch168</option>
+                    <option value="branch169">branch169</option>
+                    <option value="branch170">branch170</option>
+                    <option value="branch171">branch171</option>
+                    <option value="branch172">branch172</option>
+                    <option value="branch173">branch173</option>
+                    <option value="branch174">branch174</option>
+                    <option value="branch175">branch175</option>
+                    <option value="branch176">branch176</option>
+                    <option value="branch177">branch177</option>
+                    <option value="branch178">branch178</option>
+                    <option value="branch179">branch179</option>
+                    <option value="branch180">branch180</option>
+                    <option value="branch181">branch181</option>
+                    <option value="branch182">branch182</option>
+                    <option value="branch183">branch183</option>
+                    <option value="branch184">branch184</option>
+                    <option value="branch185">branch185</option>
+                    <option value="branch186">branch186</option>
+                    <option value="branch187">branch187</option>
+                    <option value="branch188">branch188</option>
+                    <option value="branch189">branch189</option>
+                    <option value="branch190">branch190</option>
+                    <option value="branch191">branch191</option>
+                    <option value="branch192">branch192</option>
+                    <option value="branch193">branch193</option>
+                    <option value="branch194">branch194</option>
+                    <option value="branch195">branch195</option>
+                    <option value="branch196">branch196</option>
+                    <option value="branch197">branch197</option>
+                    <option value="branch198">branch198</option>
+                    <option value="branch199">branch199</option>
+                    <option value="branch200">branch200</option>
+                    </select>
+                  </span>
+
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+            <div class="input-group">
+                  <span class="input-group-addon">
+                      <div id="policystatus">
+                          <input type="radio" name="policystatus" id="ps_healthy" value="1"/> Healthy
+                          <input type="radio" name="policystatus" id="ps_moderate" value="2"/> Moderate Policy Deviation
+                          <input type="radio" name="policystatus" id="ps_serious" value="3"/> Serious Policy Deviation
+                          <input type="radio" name="policystatus" id="ps_critical" value="4"/> Critical Policy Deviation
+                          <input type="radio" name="policystatus" id="ps_virus" value="5"/> Possible Virus infection
+                      </div>
+
+                  </span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                  <span class="input-group-addon">
+                      <div id="activityflag">
+                          <input type="radio" name="activityflag" id="af_normal" value="1"/> Normal
+                          <input type="radio" name="activityflag" id="af_down_maintainance" value="2"/> Down for Maintainance
+                          <input type="radio" name="activityflag" id="af_invalid_login" value="3"/> 5 Invalid Login
+                          <input type="radio" name="activityflag" id="af_cpu_full" value="4"/> CPU Usage Full
+                          <input type="radio" name="activityflag" id="af_ext_dev" value="5"/> External Device attached
+                      </div>
+
+                  </span>
+            </div>
+        </div>
+
+    <div id="slider-range"></div>
+
+    <input type="submit" value="Generate"/>
+ </form>
+<form>
+    <div class="col-lg-6">
+        <div class="input-group">
+                  <span class="input-group-addon">
+                      <div id="machineclass">
+                          <input class="machineclass" type="checkbox" name="server" id="server" onclick="$('.mc_server').toggle()"/> <label for="server">server</label>
+                          <input class="machineclass" type="checkbox" name="workstation" id="workstation" onclick="$('.mc_workstation').toggle()"/> <label for="workstation">workstation</label>
+                          <input class="machineclass" type="checkbox" name="atm" id="atm"/> <label for="atm">atm</label>
+                      </div>
+                  </span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+                  <span class="mc_workstation input-group-addon" hidden="true">
+                      <input class="machinefunction" type="checkbox" name="teller" id="teller" /> <label for="teller">teller</label>
+                      <input class="machinefunction" type="checkbox" name="loan" id="loan"/> <label for="loan">loan</label>
+                      <input class="machinefunction" type="checkbox" name="office" id="office"/> <label for="office">office</label>
+                  </span>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="input-group">
+                  <span class="mc_server input-group-addon" hidden="true">
+                      <input class="machinefunction" type="checkbox" name="web" id="web"/> <label for="web">web</label>
+                      <input class="machinefunction" type="checkbox" name="email" id="email"/> <label for="email">email</label>
+                      <input class="machinefunction" type="checkbox" name="compute" id="compute"/> <label for="compute">compute</label>
+                      <input class="machinefunction" type="checkbox" name="fileserver" id="fileserver"/> <label for="fileserver">fileserver</label>
+                      <input class="machinefunction" type="checkbox" name="multiple" id="multiple"/> <label for="multiple">multiple</label>
+                  </span>
+        </div>
+    </div>
+
+</form>
+</div><!-- /.row -->
+<div id="policy-time-chart">
+</div>
+<div id="activity-time-chart">
+</div>
+
+<div id="branch-policy-chart">
+
+</div>
+
+<div id="policy-chart">
+
+</div>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

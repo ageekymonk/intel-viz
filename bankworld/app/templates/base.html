@@ -1,0 +1,156 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>sandbox</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/static/styles/jquery-ui.css">
+
+    <link rel="stylesheet" href="/static/styles/main.css">
+    <link rel="stylesheet" href="/static/styles/dc.css">
+    <link href="/static/styles/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body {
+            font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .x.axis path {
+            display: none;
+        }
+
+        .area.above {
+{#            fill: rgb(252,141,89);#}
+            fill: rgb(255,0,0);
+        }
+
+        .area.below {
+            fill: rgb(145,207,96);
+        }
+
+        .line {
+            fill: none;
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
+
+        rect.pane {
+            cursor: move;
+            fill: none;
+            pointer-events: all;
+        }
+
+        .legend {
+            font-size: 8px;
+            text-anchor: middle;
+
+        }
+
+    </style>
+</head>
+<body>
+<!--[if lt IE 10]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="/static/js/jquery/dist/jquery.js"></script>
+<script src="/static/js/d3/d3.min.js"></script>
+<script src="/static/js/dc.js"></script>
+<script src="/static/js/crossfilter.js"></script>
+<script src="/static/js/jquery-ui.js"></script>
+
+<!-- endbower -->
+<!-- endbuild -->
+
+<div id="bw_dashboard">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div id="bw_map_selector">
+
+                </div>
+            </div>
+            <div class="row">
+                <div>
+
+                    <div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">
+                        <div class="ui-slider-range ui-widget-header"></div>
+                        <br>
+                        <span class="label label-default" id="start_time"></span>
+                        <span class="label label-default" id="end_time"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="test_chart">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Overall Report</a></li>
+                <li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>
+                <li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="bw_report">
+                    <div class="row">
+                        <div id="bw_ws_reported_chart">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="bw_server_reported_chart">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="bw_atm_reported_chart">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="bw_policy">
+                    <div class="row">
+                        <div id="bw_policy_chart">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="bw_activity_chart">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="bw_activity">
+                    <div class="row">
+                        <div id="bw_conn_chart">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="/static/js/app.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
