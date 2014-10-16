@@ -17,7 +17,11 @@
         body {
             font: 10px sans-serif;
         }
+        .chart-title{
+            font-size: 14px;
+            font-family: Trebuchet;
 
+        }
         .axis path,
         .axis line {
             fill: none;
@@ -30,12 +34,11 @@
         }
 
         .area.above {
-{#            fill: rgb(252,141,89);#}
-            fill: rgb(255,0,0);
+            fill: #118bff;
         }
 
         .area.below {
-            fill: rgb(145,207,96);
+            fill: red;
         }
 
         .line {
@@ -77,75 +80,135 @@
 
 <div id="bw_dashboard">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
+            <div class="row">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#overall_map" role="tab" data-toggle="tab">Overall Map</a></li>
+                    <li><a href="#overall_heatmap" role="tab" data-toggle="tab">Overall Heat Map</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="overall_map">
+                        <div class="col-md-1">
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">At</span>
+                                <input type="text" class="form-control" id="at_time">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="timeslider" style="left:50px; width:250px">
+
+                </div>
+            </div>
             <div class="row">
                 <div id="bw_map_selector">
 
                 </div>
             </div>
             <div class="row">
-                <div>
-
-                    <div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">
-                        <div class="ui-slider-range ui-widget-header"></div>
-                        <br>
-                        <span class="label label-default" id="start_time"></span>
-                        <span class="label label-default" id="end_time"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div id="test_chart">
+                <div id="bw_map_for_spread">
 
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Overall Report</a></li>
-                <li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>
-                <li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="bw_report">
-                    <div class="row">
-                        <div id="bw_ws_reported_chart">
-
-                        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">From</span>
+                        <input type="text" class="form-control" id="start_time">
                     </div>
-                    <div class="row">
-                        <div id="bw_server_reported_chart">
-
-                        </div>
                     </div>
-                    <div class="row">
-                        <div id="bw_atm_reported_chart">
-
-                        </div>
+                    <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">To</span>
+                        <input type="text" class="form-control" id="end_time">
+                    </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="bw_policy">
-                    <div class="row">
-                        <div id="bw_policy_chart">
-
-                        </div>
+                <div class="row">
+                    <br>
+                    <div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">
                     </div>
-                    <div class="row">
-                        <div id="bw_activity_chart">
-
-                        </div>
-                    </div>
+                    <br>
                 </div>
-                <div class="tab-pane" id="bw_activity">
-                    <div class="row">
-                        <div id="bw_conn_chart">
+            </div>
+            <div class="row">
 
+
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Machine Avail Status</a></li>
+                    <li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>
+                    <li><a href="#bw_activity" role="tab" data-toggle="tab">Workstation Connection Status</a></li>
+                    <li><a href="#geo_activity" role="tab" data-toggle="tab">Overall Region Status</a></li>
+                </ul>
+                <div class="tab-content">
+
+
+                    <div class="tab-pane active" id="bw_report">
+                        <div class="row">
+                            <div id="bw_ws_reported_chart">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="bw_server_reported_chart">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="bw_atm_reported_chart">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="bw_policy">
+                        <div class="row">
+                            <div id="bw_policy_chart">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="bw_activity_chart">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="bw_activity">
+                        <div class="row">
+                            <div id="bw_ws_teller_conn_chart">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="bw_ws_loan_conn_chart">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="bw_ws_office_conn_chart">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="geo_activity">
+                        <div class="row">
+                            <div id="bw_overall_report">
+
+                            </div>
+                            <div id="bw_overall_policy">
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 

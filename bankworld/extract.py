@@ -121,7 +121,7 @@ def extract_num_conn_count():
                 atm_machines = 500
                 ws_machines = 2750
 
-            cur.execute("select longitude from region_info_{0} limit 1".format(i))
+            cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
             rows = cur.fetchall()
             lag = longitude_to_timediff(rows[0][0])
             print lag
@@ -136,9 +136,9 @@ def extract_num_conn_count():
             end_time = datetime.time(18,0,0)
             for row in rows:
                 if (start_time <= (row[0]- datetime.timedelta(hours=lag)).time() <= end_time):
-                    writer.writerow((row[0], row[1], row[2], row[3], teller_count))
+                    writer.writerow((row[0], row[1], row[2], row[3], teller_count, lag))
                 else:
-                    writer.writerow((row[0], row[1], row[2], row[3], 0))
+                    writer.writerow((row[0], row[1], row[2], row[3], 0, lag))
 
 def extract_num_conn_loan_count():
     with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/ws_loan_connection.csv','w') as fp:
@@ -171,7 +171,7 @@ def extract_num_conn_loan_count():
                 atm_machines = 500
                 ws_machines = 2750
 
-            cur.execute("select longitude from region_info_{0} limit 1".format(i))
+            cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
             rows = cur.fetchall()
             lag = longitude_to_timediff(rows[0][0])
             print lag
@@ -186,9 +186,9 @@ def extract_num_conn_loan_count():
             end_time = datetime.time(18,0,0)
             for row in rows:
                 if (start_time <= (row[0]- datetime.timedelta(hours=lag)).time() <= end_time):
-                    writer.writerow((row[0], row[1], row[2], row[3], teller_count))
+                    writer.writerow((row[0], row[1], row[2], row[3], teller_count, lag))
                 else:
-                    writer.writerow((row[0], row[1], row[2], row[3], 0))
+                    writer.writerow((row[0], row[1], row[2], row[3], 0, lag))
 
 def extract_num_conn_office_count():
     with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/ws_office_connection.csv','w') as fp:
@@ -221,7 +221,7 @@ def extract_num_conn_office_count():
                 atm_machines = 500
                 ws_machines = 2750
 
-            cur.execute("select longitude from region_info_{0} limit 1".format(i))
+            cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
             rows = cur.fetchall()
             lag = longitude_to_timediff(rows[0][0])
             print lag
@@ -236,10 +236,20 @@ def extract_num_conn_office_count():
             end_time = datetime.time(18,0,0)
             for row in rows:
                 if (start_time <= (row[0]- datetime.timedelta(hours=lag)).time() <= end_time):
-                    writer.writerow((row[0], row[1], row[2], row[3], teller_count))
+                    writer.writerow((row[0], row[1], row[2], row[3], teller_count, lag))
                 else:
-                    writer.writerow((row[0], row[1], row[2], row[3], 0))
+                    writer.writerow((row[0], row[1], row[2], row[3], 0, lag))
 
-extract_num_conn_count()
-extract_num_conn_loan_count()
-extract_num_conn_office_count()
+# extract_num_conn_count()
+# extract_num_conn_loan_count()
+# extract_num_conn_office_count()
+
+def extract_datacenter():
+    with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/datacenter_report_status','w') as fp:
+        cur.execute("select healthtime,facility,count(ipaddr) from region_info_55 group by healthtime,facility order by healthtime asc")
+        rows = cur.fetchall()
+        writer = csv.writer(fp, delimiter=',')
+        for row in rows:
+            writer.writerow((row[0],row[1],row[2],50000))
+
+extract_datacenter()
