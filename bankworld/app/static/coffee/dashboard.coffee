@@ -375,8 +375,12 @@ class MultiTimeSeriesPolicyChart
   draw: (region="headquarters") ->
     @curregion = region
 
+    color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4","p5", "a1", "a2", "a3", "a4","a5"])
     button = d3.select(@parent).selectAll("button").data(["p1", "p2", "p3", "p4","p5", "a1", "a2", "a3", "a4","a5"])
-    .enter().append('button').attr("type", "button").attr("class", "btn btn-primary btn-xs").text((d) -> d)
+    .enter().append('button').attr("type", "button").attr(
+      class: "btn btn-xs"
+      id: (d) -> d
+    ).style('background-color', (d) -> color_scale(d)).text((d) -> d)
 
     # TODO: Toggle the active and inactive state for the button
     button.on("click", (d) =>
@@ -414,42 +418,38 @@ class MultiTimeSeriesPolicyChart
       )
     )
 
-#    svg.append('rect').attr(
-#      class: 'overlay'
-#      width: @width + @margin.left + @margin.right
-#      height: @height + @margin.top + @margin.bottom
-#      fill: 'none'
-#      'pointer-events': 'all'
-#    )
-#    svg.on("mousemove", () =>
-#      x0 = x.invert(d3.mouse(d3.event.target)[0])
-#      bisectDate = d3.bisector((d) -> d.timestamp).left
-#      i = bisectDate(data, x0, 1)
-#      d0 = data[i-1]
-#      d1 = data[i]
-#      d = if x0 - d0.date > d1.date - x0 then  d1 else d0
-#      data_list = data.filter((d) -> d.timestamp == d0.timestamp)
-#      svg.select('#policystatus_tooltip_line').remove()
-#      svg.append('line').attr(
-#        x1: x(d.timestamp)
-#        y1: 0
-#        x2: x(d.timestamp)
-#        y2: @height
-#        stroke: 'red'
-#        id: 'policystatus_tooltip_line'
-#      )
-#      svg.select('#policystatus_data_id').remove()
-#      svg.append('text').text(d.numipaddr).attr('x', x(d.timestamp)+10).attr('y', y(d.numipaddr)+10)
-#      .attr('id', 'policystatus_data_id')
-#    )
-
-#    svg.selectAll('line').on("mouseover.tooltip",
-#    (d) =>
-#      svg.select('#data_id').remove()
-#      svg.append('text').text(d.numipaddr).attr('x', x(d.timestamp)+10).attr('y', y(d.numipaddr)+10).attr('id', 'data_id')
-#    )
-#    svg.selectAll('line').on("mouseout.tooltip",
-#    (d) => svg.select('#data_id').transition().duration(20).style('opacity',0).attr('transform','translate(10,-10)').remove())
+    svg.append('rect').attr(
+      class: 'overlay'
+      width: @width + @margin.left + @margin.right
+      height: @height + @margin.top + @margin.bottom
+      fill: 'none'
+      'pointer-events': 'all'
+    )
+    svg.on("mousemove", () =>
+      x0 = x.invert(d3.mouse(d3.event.target)[0])
+      bisectDate = d3.bisector((d) -> d.timestamp).left
+      i = bisectDate(data, x0, 1)
+      d0 = data[i-1]
+      d1 = data[i]
+      d = if x0 - d0.date > d1.date - x0 then  d1 else d0
+      data_list = data.filter((d) -> d.timestamp == d0.timestamp)
+      svg.select('#policystatus_tooltip_line').remove()
+      svg.append('line').attr(
+        x1: x(d.timestamp)
+        y1: 0
+        x2: x(d.timestamp)
+        y2: @height
+        stroke: 'brown'
+        id: 'policystatus_tooltip_line'
+      )
+      svg.select('#policystatus_data_id').remove()
+      info = ""
+      @policystatus.forEach( (policystatus) =>
+        info = info + "[#{policystatus}: #{d[policystatus]}] "
+      )
+      svg.append('text').text(info).attr('x', x(d.timestamp)+10).attr('y', 30)
+      .attr('id', 'policystatus_data_id')
+    )
 
     svg.append("g")
     .attr("class", "x axis")

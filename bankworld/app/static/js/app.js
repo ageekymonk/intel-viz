@@ -801,7 +801,15 @@
         region = "headquarters";
       }
       this.curregion = region;
-      button = d3.select(this.parent).selectAll("button").data(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]).enter().append('button').attr("type", "button").attr("class", "btn btn-primary btn-xs").text(function(d) {
+      color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]);
+      button = d3.select(this.parent).selectAll("button").data(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]).enter().append('button').attr("type", "button").attr({
+        "class": "btn btn-xs",
+        id: function(d) {
+          return d;
+        }
+      }).style('background-color', function(d) {
+        return color_scale(d);
+      }).text(function(d) {
         return d;
       });
       button.on("click", (function(_this) {
@@ -875,6 +883,44 @@
             }),
             stroke: color_scale(policystatus)
           });
+        };
+      })(this));
+      svg.append('rect').attr({
+        "class": 'overlay',
+        width: this.width + this.margin.left + this.margin.right,
+        height: this.height + this.margin.top + this.margin.bottom,
+        fill: 'none',
+        'pointer-events': 'all'
+      });
+      svg.on("mousemove", (function(_this) {
+        return function() {
+          var bisectDate, d, d0, d1, data_list, i, info, x0;
+          x0 = x.invert(d3.mouse(d3.event.target)[0]);
+          bisectDate = d3.bisector(function(d) {
+            return d.timestamp;
+          }).left;
+          i = bisectDate(data, x0, 1);
+          d0 = data[i - 1];
+          d1 = data[i];
+          d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+          data_list = data.filter(function(d) {
+            return d.timestamp === d0.timestamp;
+          });
+          svg.select('#policystatus_tooltip_line').remove();
+          svg.append('line').attr({
+            x1: x(d.timestamp),
+            y1: 0,
+            x2: x(d.timestamp),
+            y2: _this.height,
+            stroke: 'brown',
+            id: 'policystatus_tooltip_line'
+          });
+          svg.select('#policystatus_data_id').remove();
+          info = "";
+          _this.policystatus.forEach(function(policystatus) {
+            return info = info + ("[" + policystatus + ": " + d[policystatus] + "] ");
+          });
+          return svg.append('text').text(info).attr('x', x(d.timestamp) + 10).attr('y', 30).attr('id', 'policystatus_data_id');
         };
       })(this));
       svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + this.height + ")").call(xAxis);
