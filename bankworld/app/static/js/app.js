@@ -779,137 +779,106 @@
       this.width = w - this.margin.left - this.margin.right;
       this.height = h - this.margin.top - this.margin.bottom;
       this.parent = parent;
-      this.data = null;
+      this.allbudata = null;
       this.title = title;
       this.evDispatch = evDispatch;
       this.curregion = "headquarters";
-      this.policystatus = [5];
+      this.policystatus = ['p4', 'p5'];
     }
 
-    MultiTimeSeriesPolicyChart.prototype.draw = function(region, data) {
-      var button, dateFormat, line, policystatus, svg, x, xAxis, y, yAxis;
+    MultiTimeSeriesPolicyChart.prototype.load = function(data) {
+      var dateFormat;
+      this.allbudata = data;
+      dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+      return this.allbudata.forEach(function(d) {
+        return d.timestamp = dateFormat.parse(d.healthtime);
+      });
+    };
+
+    MultiTimeSeriesPolicyChart.prototype.draw = function(region) {
+      var button, color_scale, data, svg, x, xAxis, y, yAxis;
       if (region == null) {
         region = "headquarters";
       }
-      if (data == null) {
-        data = null;
-      }
       this.curregion = region;
-      policystatus = this.policystatus;
-      button = d3.select(this.parent).selectAll("button").data(["1", "2", "3", "4", "5"]).enter().append('button').attr("type", "button").attr("class", "btn btn-primary btn-xs").text(function(d) {
+      button = d3.select(this.parent).selectAll("button").data(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]).enter().append('button').attr("type", "button").attr("class", "btn btn-primary btn-xs").text(function(d) {
         return d;
       });
       button.on("click", (function(_this) {
         return function(d) {
-          _this.policystatus = [+d];
-          return _this.draw(_this.curregion, _this.data);
+          if (__indexOf.call(_this.policystatus, d) < 0) {
+            _this.policystatus.push(d);
+          } else {
+            _this.policystatus = _this.policystatus.filter(function(val) {
+              return d !== val;
+            });
+          }
+          return _this.draw(_this.curregion);
         };
       })(this));
-      data = data === null ? this.data : data;
-      this.data = data;
-      dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-      data = data.filter((function(_this) {
+      data = this.allbudata.filter((function(_this) {
         return function(d) {
           return d.businessunit === region;
         };
       })(this));
-      data.forEach(function(d) {
-        return d.timestamp = dateFormat.parse(d.healthtime);
-      });
-      x = d3.time.scale().range([0, this.width]);
-      y = d3.scale.linear().range([this.height, 0]);
-      xAxis = d3.svg.axis().scale(x).orient("bottom");
-      yAxis = d3.svg.axis().scale(y).orient("left");
-      line = d3.svg.line().x(function(d) {
-        return x(d.timestamp);
-      }).y(function(d) {
-        return y(+d.numipaddr);
-      });
       d3.select(this.parent).selectAll("svg").remove();
       svg = d3.select(this.parent).append('svg').attr({
         width: this.width + this.margin.left + this.margin.right,
         height: this.height + this.margin.top + this.margin.bottom
       }).append('g').attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+      x = d3.time.scale().range([0, this.width]);
       x.domain(d3.extent(data, function(d) {
         return d.timestamp;
       }));
-      y.domain(d3.extent(data.filter((function(_this) {
-        return function(d) {
-          var _ref;
-          return _ref = +d.policystatus, __indexOf.call(policystatus, _ref) >= 0;
-        };
-      })(this)), function(d) {
-        return +d.numipaddr;
-      }));
-      svg.append("path").datum(data.filter((function(_this) {
-        return function(d) {
-          var _ref;
-          return _ref = +d.policystatus, __indexOf.call(policystatus, _ref) >= 0;
-        };
-      })(this))).attr("class", "line").attr("d", line);
-      svg.selectAll("line").data(data.filter((function(_this) {
-        return function(d) {
-          var _ref;
-          return _ref = +d.policystatus, __indexOf.call(policystatus, _ref) >= 0;
-        };
-      })(this))).enter().append('line').attr({
-        x1: (function(_this) {
+      y = d3.scale.linear().range([this.height, 0]);
+      y.domain([
+        d3.min(data, (function(_this) {
           return function(d) {
-            return x(d.timestamp);
+            var s;
+            return d3.min((function() {
+              var _i, _len, _ref, _results;
+              _ref = this.policystatus;
+              _results = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                s = _ref[_i];
+                _results.push(+d[s]);
+              }
+              return _results;
+            }).call(_this));
           };
-        })(this),
-        y1: 0,
-        x2: (function(_this) {
+        })(this)), d3.max(data, (function(_this) {
           return function(d) {
-            return x(d.timestamp);
+            var s;
+            return d3.max((function() {
+              var _i, _len, _ref, _results;
+              _ref = this.policystatus;
+              _results = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                s = _ref[_i];
+                _results.push(+d[s]);
+              }
+              return _results;
+            }).call(_this));
           };
-        })(this),
-        y2: this.height
-      });
-      svg.selectAll("circle").data(data.filter((function(_this) {
-        return function(d) {
-          var _ref;
-          return _ref = +d.policystatus, __indexOf.call(policystatus, _ref) >= 0;
-        };
-      })(this))).enter().append('circle').attr({
-        cx: (function(_this) {
-          return function(d) {
-            return x(d.timestamp);
-          };
-        })(this),
-        cy: (function(_this) {
-          return function(d) {
-            return y(+d.numipaddr);
-          };
-        })(this),
-        r: 1
-      }).style('stroke', "steelblue");
-      svg.selectAll('circle').on("mouseover", function() {
-        return d3.select(this).transition().attr('r', 5);
-      });
-      svg.selectAll('circle').on("mouseout", function() {
-        return d3.select(this).transition().attr('r', 1);
-      });
-      svg.selectAll('line').on("mouseover", function() {
-        return d3.select(this).transition().attr('stroke', 'red');
-      });
-      svg.selectAll('line').on("mouseout", function() {
-        return d3.select(this).transition().attr('stroke', 'white');
-      });
-      svg.selectAll('line').on("mouseover.tooltip", (function(_this) {
-        return function(d) {
-          svg.select('#data_id').remove();
-          return svg.append('text').text(d.numipaddr).attr('x', x(d.timestamp) + 10).attr('y', y(d.numipaddr) + 10).attr('id', 'data_id');
-        };
-      })(this));
-      svg.selectAll('line').on("mouseout.tooltip", (function(_this) {
-        return function(d) {
-          return svg.select('#data_id').transition().duration(20).style('opacity', 0).attr('transform', 'translate(10,-10)').remove();
+        })(this))
+      ]);
+      xAxis = d3.svg.axis().scale(x).orient("bottom");
+      yAxis = d3.svg.axis().scale(y).orient("left");
+      color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]);
+      this.policystatus.forEach((function(_this) {
+        return function(policystatus) {
+          return svg.append("path").datum(data).attr("class", "line").attr({
+            d: d3.svg.line().x(function(d) {
+              return x(d.timestamp);
+            }).y(function(d) {
+              return y(+d[policystatus]);
+            }),
+            stroke: color_scale(policystatus)
+          });
         };
       })(this));
       svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + this.height + ")").call(xAxis);
-      svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end");
-      return svg.append("text").attr("x", this.width / 2).attr("y", 0 - (this.margin.top / 2)).attr("text-anchor", "middle").style("font-size", "12px").text("Policy " + policystatus);
+      return svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end");
     };
 
     return MultiTimeSeriesPolicyChart;
@@ -1042,9 +1011,7 @@
             end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
             $("#start_time").attr("value", start_date.toString());
             $("#end_time").attr("value", end_date.toString());
-            _this.evdispatch.selectTime(start_date, end_date);
-            console.log(start_date.toString());
-            return console.log(end_date.toString());
+            return _this.evdispatch.selectTime(start_date, end_date);
           };
         })(this)
       });
@@ -1102,9 +1069,10 @@
           return _this.bw_activity_chart.draw("headquarters", 5, data);
         };
       })(this));
-      return d3.csv('/static/csv/policy12345_status.csv', (function(_this) {
+      return d3.csv('/static/csv/overall_policy_activity_status_new.csv', (function(_this) {
         return function(error, data) {
-          return _this.bw_policy_chart.draw("headquarters", data);
+          _this.bw_policy_chart.load(data);
+          return _this.bw_policy_chart.draw("headquarters");
         };
       })(this));
     };
