@@ -235,11 +235,15 @@ class BWDashboard
     @evdispatch.on("selectRegion.atm", (region) => @bw_atm_reported_chart.draw(region))
     @evdispatch.on("selectTime.atm", (start,end) => @bw_atm_reported_chart.draw(null, null,start,end))
 
-    @bw_ws_conn_chart = new WsConnectionsChart(760,200,"#bw_ws_teller_conn_chart", "Teller Machine Connections")
+    @bw_ws_conn_chart = new WsConnectionsChart(760,200,"#bw_ws_conn_chart", "WS Connections")
     @evdispatch.on("selectRegion.bw_ws_conn_chart", (region) => @bw_ws_conn_chart.draw(region))
     @evdispatch.on("selectTime.bw_ws_conn_chart", (start,end) => @bw_ws_conn_chart.draw(null))
 
-    @bw_policy_chart = new MultiTimeSeriesPolicyChart(760,200,"#bw_policy_chart","Policy Flag",@evdispatch)
+    @bw_server_conn_chart = new ServerConnectionsChart(760,200,"#bw_server_conn_chart", "Server Connections")
+    @evdispatch.on("selectRegion.bw_server_conn_chart", (region) => @bw_server_conn_chart.draw(region))
+    @evdispatch.on("selectTime.bw_server_conn_chart", (start,end) => @bw_server_conn_chart.draw(null))
+
+    @bw_policy_chart = new MultiTimeSeriesPolicyChart(760,200,"#bw_policy_chart","Policy & Activity Flag",@evdispatch)
     @evdispatch.on("selectRegion.policy", (region) => @bw_policy_chart.draw(region))
 
     $("#slider-range" ).slider(
@@ -284,7 +288,10 @@ class BWDashboard
       @bw_ws_conn_chart.load(data)
       @bw_ws_conn_chart.draw("headquarters", data)
     )
-
+    d3.csv('/static/csv/server_connection_new.csv', (error, data) =>
+      @bw_server_conn_chart.load(data)
+      @bw_server_conn_chart.draw("headquarters", data)
+    )
     d3.csv('/static/csv/overall_policy_activity_status_new.csv', (error, data) =>
       @bw_policy_chart.load(data)
       @bw_policy_chart.draw("headquarters")

@@ -117,3 +117,10 @@ class MultiTimeSeriesPolicyChart
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Machine Count")
+
+    svg.append("text")
+    .attr("x", (@width / 2))
+    .attr("y", 0 - (@margin.top / 2))
+    .attr("text-anchor", "middle")
+    .attr("class", "chart-title")
+    .text(@curregion);
