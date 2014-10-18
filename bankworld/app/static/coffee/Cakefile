@@ -3,8 +3,9 @@
 coffeeFiles = [
     'app.coffee',
     'bwmaps.coffee'
+    'activity_and_policy.coffee'
+    'connections.coffee'
     'dashboard.coffee'
-
 ]
 
 task 'build', 'Build PunchedOut! JavaScript file', ->
