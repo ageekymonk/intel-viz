@@ -154,7 +154,6 @@
             return d.height = (d.y2 - d.y1) === 0 ? 5 : d.y2 - d.y1;
           });
           dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-          console.log("Got the coordinates");
           _this.coord = world;
           return d3.csv('/static/csv/policy5_status.csv').get(function(error, datareport) {
             _this.datareport = datareport;
@@ -196,6 +195,20 @@
       }).on("click", (function(_this) {
         return function(d) {
           return _this.evDispatch.selectRegion(d.businessunit);
+        };
+      })(this));
+      this.svg.selectAll('circle').on("mouseover.tooltip", (function(_this) {
+        return function(d) {
+          _this.svg.select('#spread_data_id').remove();
+          return _this.svg.append('text').text(d.businessunit).attr('x', d.x1).attr('y', d.y1).attr('id', 'spread_data_id').attr({
+            stroke: 'blue',
+            'stroke-width': '0.5'
+          });
+        };
+      })(this));
+      this.svg.selectAll('circle').on("mouseout.tooltip", (function(_this) {
+        return function(d) {
+          return _this.svg.select('#spread_data_id').transition().duration(20).style('opacity', 0).attr('transform', 'translate(10,-10)').remove();
         };
       })(this));
       report = this.datareport.filter((function(_this) {
@@ -1069,17 +1082,12 @@
         parent = "body";
       }
       this.setupEventDispatch();
-      this.setupFrame();
       this.setupPlots();
       this.loadData();
     }
 
     BWDashboard.prototype.setupEventDispatch = function() {
       return this.evdispatch = d3.dispatch("load", "selectRegion", "selectTime", "attime");
-    };
-
-    BWDashboard.prototype.setupFrame = function() {
-      return console.log("here");
     };
 
     BWDashboard.prototype.setupPlots = function() {
@@ -1187,7 +1195,7 @@
             var dateFormat, start_date;
             dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
             start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.value * 60000 * 15);
-            $("#at_time").attr("value", start_date.toString());
+            $("#attime").val(start_date.toString());
             return _this.evdispatch.attime(start_date);
           };
         })(this)

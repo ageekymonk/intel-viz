@@ -200,16 +200,11 @@ class MultiLineChart
 class BWDashboard
   constructor: (parent="body") ->
     @setupEventDispatch()
-    @setupFrame()
     @setupPlots()
     @loadData()
 
   setupEventDispatch: ->
     @evdispatch = d3.dispatch("load", "selectRegion", "selectTime", "attime")
-
-  #TODO: Change it to json based grid format
-  setupFrame: ->
-    console.log("here")
 
   setupPlots: ->
     @bw_map_selector = new BWMap(400,300,"#bw_map_selector",@evdispatch)
@@ -270,7 +265,7 @@ class BWDashboard
       slide: ( event, ui ) =>
         dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
         start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.value*60000*15)
-        $("#at_time").attr("value", start_date.toString())
+        $("#attime").val(start_date.toString())
         @evdispatch.attime(start_date)
     )
 
@@ -284,6 +279,7 @@ class BWDashboard
     d3.csv('/static/csv/atm_report_status.csv', (error, data) =>
       @bw_atm_reported_chart.draw("headquarters", data)
     )
+
     d3.csv('/static/csv/ws_connection_new.csv', (error, data) =>
       @bw_ws_conn_chart.load(data)
       @bw_ws_conn_chart.draw("headquarters", data)

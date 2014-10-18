@@ -83,7 +83,9 @@
         <div class="col-md-5">
             <div class="row">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#overall_map" role="tab" data-toggle="tab">Overall Map</a></li>
+                    <li class="active">
+                        <a href="#overall_map" role="tab" data-toggle="tab" style="margin-left: 40px">Overall Map</a>
+                    </li>
                     <li><a href="#overall_heatmap" role="tab" data-toggle="tab">Overall Heat Map</a></li>
                 </ul>
                 <div class="tab-content">
@@ -91,25 +93,28 @@
                         <div class="col-md-1">
 
                         </div>
-                        <div class="col-md-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon">At</span>
-                                <input type="text" class="form-control" id="at_time">
-                            </div>
-                        </div>
+                        <!--<div class="col-md-4">-->
+                            <!--<div class="input-group input-group-sm">-->
+                                <!--<span class="input-group-addon">At</span>-->
+                                <!--<input type="text" class="form-control" id="at_time">-->
+                            <!--</div>-->
+                        <!--</div>-->
+
                     </div>
                 </div>
             </div>
             <div class="row">
+                <label for="attime" style="border:0; margin-left: 40px;font-weight:bold;">Time Frame:</label>
+                <input type="text" id="attime" readonly style="border:0; font-weight:bold;">
                 <div id="timeslider" style="left:50px; width:250px">
 
                 </div>
             </div>
-            <div class="row">
-                <div id="bw_map_selector">
+            <!--<div class="row">-->
+                <!--<div id="bw_map_selector">-->
 
-                </div>
-            </div>
+                <!--</div>-->
+            <!--</div>-->
             <div class="row">
                 <div id="bw_map_for_spread">
 
