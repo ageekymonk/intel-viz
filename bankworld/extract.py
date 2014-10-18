@@ -1,6 +1,7 @@
 import psycopg2
 import csv
 import datetime
+import operator
 conn = psycopg2.connect("dbname=ramz user=ramz")
 
 cur = conn.cursor()
@@ -91,7 +92,7 @@ def extract():
 # extract_bu_count()
 
 def extract_num_conn_count():
-    with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/ws_teller_connection.csv','w') as fp:
+    with open('/Users/ramz/Projects/uni/datavis/visproj/bankworld/app/static/csv/ws_connection_new.csv','w') as fp:
         writer = csv.writer(fp, delimiter=',')
         for i in range(1,57):
             if 0 < i <= 10:
@@ -124,21 +125,28 @@ def extract_num_conn_count():
             cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
             rows = cur.fetchall()
             lag = longitude_to_timediff(rows[0][0])
-            print lag
-            cur.execute("select count(distinct(ipaddr)) from region_info_{0} where machinefunction='teller'".format(i))
-            rows = cur.fetchall()
-            teller_count = rows[0][0]
-            cur.execute("select healthtime, businessunit, count(ipaddr), avg(numconnections) "
-                        "from region_info_{0} where machineclass='workstation' and machinefunction='teller' group by healthtime, businessunit order by healthtime asc".format(i))
+            cur.execute("select healthtime, businessunit, machinefunction,count(ipaddr), avg(numconnections) "
+                        "from region_info_{0} where machineclass='workstation' group by "
+                        "healthtime, businessunit, machinefunction order by healthtime asc;".format(i))
             rows = cur.fetchall()
             print "Query completed for {0}".format(i)
             start_time = datetime.time(7,0,0)
             end_time = datetime.time(18,0,0)
+            bu_info = {}
             for row in rows:
-                if (start_time <= (row[0]- datetime.timedelta(hours=lag)).time() <= end_time):
-                    writer.writerow((row[0], row[1], row[2], row[3], teller_count, lag))
-                else:
-                    writer.writerow((row[0], row[1], row[2], row[3], 0, lag))
+                time_info = bu_info.get(row[0], {'teller_reported' : 0, 'loan_reported' : 0 , 'office_reported' : 0,
+                                                'teller_avg_conn' : 0, 'loan_avg_conn' : 0, 'office_avg_conn' : 0})
+                time_info['businessunit'] = row[1]
+                time_info['lag'] = lag
+                time_info[row[2] +'_reported'] = row[3]
+                time_info[row[2] +'_avg_conn'] = row[4]
+                bu_info[row[0]] = time_info
+
+            for key, time_info in sorted(bu_info.items(),key=operator.itemgetter(0)):
+                writer.writerow((key, time_info['businessunit'], lag, time_info['teller_reported'], time_info['teller_avg_conn'],
+                                 time_info['loan_reported'], time_info['loan_avg_conn'], time_info['office_reported'], time_info['office_avg_conn']))
+
+extract_num_conn_count()
 
 def extract_num_conn_loan_count():
     with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/ws_loan_connection.csv','w') as fp:
@@ -252,4 +260,37 @@ def extract_datacenter():
         for row in rows:
             writer.writerow((row[0],row[1],row[2],50000))
 
-extract_datacenter()
+# extract_datacenter()
+
+def extract_workstation_activity_policy():
+    with open('/Users/ramz/Projects/uni/datavis/visproj/bankworld/app/static/csv/server_policy_activity_status.csv','w') as fp:
+        for i in range(1,57):
+            bu_info = {}
+            cur.execute("select healthtime, businessunit, policystatus, count(ipaddr) from region_info_{0} where machineclass='server' "
+                        "group by healthtime, policystatus, businessunit order by healthtime asc;".format(i))
+            rows = cur.fetchall()
+            for row in rows:
+                time_info = bu_info.get(row[0], {})
+                time_info['businessunit'] = row[1]
+                time_info['p'+str(row[2])] = row[3]
+                bu_info[row[0]] = time_info
+
+            cur.execute("select healthtime, businessunit, activityflag, count(ipaddr) from region_info_{0} where machineclass='server' "
+                        "group by healthtime, activityflag, businessunit order by healthtime asc;".format(i))
+            rows = cur.fetchall()
+            for row in rows:
+                time_info = bu_info.get(row[0], {})
+                time_info['businessunit'] = row[1]
+                time_info['a'+str(row[2])] = row[3]
+                bu_info[row[0]] = time_info
+
+            wr = csv.writer(fp,delimiter=',')
+            for key,timedetail in sorted(bu_info.items(),key=operator.itemgetter(0)):
+                temp = timedetail['businessunit']
+                if 51 <= i <= 55:
+                    temp = "datacenter-{0}".format(i-50)
+                wr.writerow((key, temp , timedetail.get('a1',0), timedetail.get('a2',0), timedetail.get('a3',0),
+                             timedetail.get('a4',0), timedetail.get('a5',0),timedetail.get('p1',0), timedetail.get('p2',0),
+                             timedetail.get('p3',0), timedetail.get('p4',0), timedetail.get('p5',0)))
+
+# extract_workstation_activity_policy()

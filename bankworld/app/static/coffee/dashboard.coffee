@@ -204,158 +204,9 @@ class MultiLineChart
 #    .attr("y", @height + (@margin.bottom/2)+ 15).attr("class", "legend").style("stroke", "royalblue")
 #    .text("Up but should be Down")
 
-class BWSpreadMap
-  constructor: (width=400, height=300, parent="body",evDispatch) ->
-    @width = width
-    @height = height
-    @evDispatch = evDispatch
-    @projection = d3.geo.equirectangular()
-    @svg = d3.select(parent).append("svg").attr(
-      width: @width
-      height: @height
-    )
-
-  draw: ->
-    d3.csv('/static/csv/branch_lat_long.csv').get((error, world) =>
-      world.forEach( (d) =>
-        [d.x1,d.y1] = @projection([d.minlong,d.maxlat])
-        [d.x2,d.y2] = @projection([d.maxlong,d.minlat])
-
-        d.width =  if (d.x2 - d.x1) == 0 then 5 else (d.x2 - d.x1)
-        d.height = if (d.y2 - d.y1) == 0 then 5 else (d.y2 - d.y1)
-      )
-
-      @svg.selectAll(".area").data(world)
-      .enter().append("rect", ".area")
-      .attr(
-        x: (d) -> d.x1
-        y: (d) -> d.y1
-        width: (d) -> d.width
-        height: (d) -> d.height
-        id: (d) -> "bu_"+d.businessunit
-      ).style("stroke", "black").attr("fill", "white").text((d) -> d.businessunit).on("click", (d) =>
-        @evDispatch.selectRegion(d.businessunit))
-
-      d3.select(self.frameElement).style("height", @height + "px")
-    )
-
-  virusSpread: ->
-    d3.csv('/static/csv/policy5_status.csv').get((error,virusdata) =>
-      dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
-      virusdata.forEach( (d) =>
-        d.timestamp = dateFormat.parse(d.healthtime)
-      )
-
-      virusdata.forEach( (vd) =>
-        if +vd.numipaddr > 0
-          data = @svg.select("#bu_"+vd.businessunit).datum()
-          console.log([1..1+(+vd.numipaddr/10)])
-          @svg.selectAll("circle").data([1..1+(+vd.numipaddr/10)]).enter().append("circle").attr(
-            cx: (d) => data.x1 + data.width/2 + d*2
-            cy: (d) => data.y1 + data.height/2 + d*2
-            r: 2
-          ).style("fill","steelblue")
-      )
-
-    )
-
-class MultiTimeSeriesChart
-  constructor: (w, h, parent="body", title = "", evDispatch) ->
-    @margin = {top: 20, right: 20, bottom: 50, left: 50}
-    @width = w - @margin.left - @margin.right
-    @height = h - @margin.top - @margin.bottom
-    @parent = parent
-    @data = null
-    @title = title
-    @evDispatch = evDispatch
-    @curregion = "headquarters"
-
-
-  draw: (region="headquarters", activityflag = 5, data=null) ->
-    @curregion = region
-    button = d3.select(@parent).selectAll("button").data(["1", "2", "3", "4","5"])
-    .enter().append('button').attr("type", "button").attr("class", "btn btn-primary btn-xs").text((d) -> d)
-
-    button.on("click", (d) =>
-      console.log(@curregion)
-      @draw(@curregion,+d, @data))
-
-    data = if data is null then @data else data
-    @data = data
-    dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
-    data = data.filter( (d) => d.businessunit == region)
-    data.forEach( (d) ->
-      d.timestamp = dateFormat.parse(d.healthtime)
-    )
-
-    x = d3.time.scale().range([0,@width])
-    y = d3.scale.linear().range([@height,0])
-    xAxis = d3.svg.axis().scale(x).orient("bottom")
-    yAxis = d3.svg.axis().scale(y).orient("left")
-    line = d3.svg.line().x( (d) -> x(d.timestamp)).y((d) -> y(+d.numipaddr))
-
-    d3.select(@parent).selectAll("svg").remove()
-    svg = d3.select(@parent).append('svg').attr(
-      width : @width + @margin.left + @margin.right,
-      height : @height + @margin.top + @margin.bottom
-    ).append('g').attr("transform","translate("+@margin.left + ","+@margin.top+")")
-
-    x.domain(d3.extent(data, (d) -> d.timestamp))
-    y.domain(d3.extent(data.filter( (d) => +d.activityflag == activityflag), (d) -> +d.numipaddr))
-
-    svg.append("path").datum(data.filter( (d) => +d.activityflag == activityflag)).attr("class", "line").attr("d", line)
-    svg.selectAll("circle").data(data.filter( (d) => +d.activityflag == activityflag))
-    .enter().append('circle').attr(
-      cx: (d) => x(d.timestamp)
-      cy: (d) => y(+d.numipaddr)
-      r: 1
-    ).style('stroke',"steelblue")
-
-    svg.selectAll('circle').on("mouseover", () -> d3.select(this).transition().attr('r',5))
-    svg.selectAll('circle').on("mouseout", () -> d3.select(this).transition().attr('r',1))
-
-    svg.selectAll('circle').on("mouseover.tooltip",
-    (d) =>
-      svg.select('#data_id').remove()
-      svg.append('text').text(d.numipaddr).attr('x', x(d.timestamp)+10).attr('y', y(d.numipaddr)+10).attr('id', 'data_id')
-    )
-    svg.selectAll('circle').on("mouseout.tooltip",
-    (d) => svg.select('#data_id').transition().duration(20).style('opacity',0).attr('transform','translate(10,-10)').remove())
-
-
-    svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + @height + ")")
-    .call(xAxis)
-
-    svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    #    .text("Unexpected On Machines")
-
-    svg.append("text")
-    .attr("x", (@width / 2))
-    .attr("y", 0 - (@margin.top / 2))
-    .attr("text-anchor", "middle")
-    .style("font-size", "12px")
-    .text("Activity " + activityflag);
-
-#    legend = svg.append('g')
-#    legend.append("text").attr("x", @width/2)
-#    .attr("y", @height + (@margin.bottom/2)+ 5).attr("class", "legend").style("stroke", "green")
-#    .text("Down but should be up")
-#    legend.append("text").attr("x", @width/2)
-#    .attr("y", @height + (@margin.bottom/2)+ 15).attr("class", "legend").style("stroke", "red")
-#    .text("Up but should be Down")
-
 class MultiTimeSeriesPolicyChart
   constructor: (w, h, parent="body", title = "", evDispatch) ->
-    @margin = {top: 20, right: 20, bottom: 50, left: 50}
+    @margin = {top: 20, right: 60, bottom: 50, left: 60}
     @width = w - @margin.left - @margin.right
     @height = h - @margin.top - @margin.bottom
     @parent = parent
@@ -393,10 +244,11 @@ class MultiTimeSeriesPolicyChart
     data = @allbudata.filter( (d) => d.businessunit == region)
 
     d3.select(@parent).selectAll("svg").remove()
-    svg = d3.select(@parent).append('svg').attr(
+    canvas = d3.select(@parent).append('svg').attr(
       width : @width + @margin.left + @margin.right,
       height : @height + @margin.top + @margin.bottom
-    ).append('g').attr("transform","translate("+@margin.left + ","+@margin.top+")")
+    )
+    svg = canvas.append('g').attr("transform","translate("+@margin.left + ","+@margin.top+")")
 
     x = d3.time.scale().range([0,@width])
     x.domain(d3.extent(data, (d) -> d.timestamp))
@@ -439,16 +291,20 @@ class MultiTimeSeriesPolicyChart
         y1: 0
         x2: x(d.timestamp)
         y2: @height
-        stroke: 'brown'
+        stroke: 'green'
+        'stroke-width' : 2
         id: 'policystatus_tooltip_line'
       )
       svg.select('#policystatus_data_id').remove()
-      info = ""
+
+      tootltip_box = svg.append('g').attr('id', 'policystatus_data_id')
+      tootltip_box.append('text').text(d['healthtime']).attr('x', x(d.timestamp)+10).attr('y', 30).attr('stroke', 'green').attr('stroke-width',0.5)
+      num_policy_in_text = 1
       @policystatus.forEach( (policystatus) =>
-        info = info + "[#{policystatus}: #{d[policystatus]}] "
+        tootltip_box.append('text').text("#{policystatus}: #{d[policystatus]}").attr('x', x(d.timestamp)+10).attr('y', 30+num_policy_in_text*10)
+        .attr('stroke', 'green').attr('stroke-width',0.5)
+        num_policy_in_text = num_policy_in_text + 1
       )
-      svg.append('text').text(info).attr('x', x(d.timestamp)+10).attr('y', 30)
-      .attr('id', 'policystatus_data_id')
     )
 
     svg.append("g")
@@ -459,19 +315,13 @@ class MultiTimeSeriesPolicyChart
     svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
+
+    canvas.append("text")
+    .attr("transform", "translate(0,30) rotate(-90)")
+    .attr("y", 10)
     .attr("dy", ".71em")
     .style("text-anchor", "end")
-#    .text("Unexpected On Machines")
-
-#    svg.append("text")
-#    .attr("x", (@width / 2))
-#    .attr("y", 0 - (@margin.top / 2))
-#    .attr("text-anchor", "middle")
-#    .style("font-size", "12px")
-#    .text("Policy " + policystatus);
+    .text("Machine Count")
 
 class BWDashboard
   constructor: (parent="body") ->
@@ -523,9 +373,6 @@ class BWDashboard
     @evdispatch.on("selectRegion.bw_ws_office_conn_chart", (region) => @bw_ws_office_conn_chart.draw(region))
     @evdispatch.on("selectTime.bw_ws_office_conn_chart", (start,end) => @bw_ws_office_conn_chart.draw(null, null,start,end))
 
-    @bw_activity_chart = new MultiTimeSeriesChart(760,200,"#bw_activity_chart","Activity Flag",@evdispatch)
-    @evdispatch.on("selectRegion.activity", (region) => @bw_activity_chart.draw(region))
-
     @bw_policy_chart = new MultiTimeSeriesPolicyChart(760,200,"#bw_policy_chart","Policy Flag",@evdispatch)
     @evdispatch.on("selectRegion.policy", (region) => @bw_policy_chart.draw(region))
 
@@ -575,9 +422,6 @@ class BWDashboard
     )
     d3.csv('/static/csv/ws_office_connection.csv', (error, data) =>
       @bw_ws_office_conn_chart.draw("headquarters", data)
-    )
-    d3.csv('/static/csv/activity12345_status.csv', (error, data) =>
-      @bw_activity_chart.draw("headquarters", 5, data)
     )
     d3.csv('/static/csv/overall_policy_activity_status_new.csv', (error, data) =>
       @bw_policy_chart.load(data)
