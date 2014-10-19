@@ -22,7 +22,7 @@ def extract_lat_long():
 def extract():
 
     # for activity in range(1,3):
-    with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/atm_report_status.csv','w') as fp:
+    with open('/Users/ramz/Projects/uni/datavis/visproj/bankworld/app/static/csv/server_report_status_new.csv','w') as fp:
         for i in range(1,57):
             if 0 < i <= 10:
                 total_machines = 41000
@@ -60,7 +60,7 @@ def extract():
             # num_teller = rows[0][0]
             # print num_teller
             cur.execute("select healthtime, businessunit, count(distinct(ipaddr)) "
-                        "from region_info_{0} where machineclass='atm' group by healthtime, businessunit".format(i))
+                        "from region_info_{0} where machineclass='server' group by healthtime, businessunit".format(i))
             rows = cur.fetchall()
             writer = csv.writer(fp, delimiter=',')
             print("Query done for Region {0}".format(i))
@@ -71,12 +71,12 @@ def extract():
             end_time = datetime.time(18,0,0)
             for row in rows:
                 if (start_time <= (row[0]- datetime.timedelta(hours=lag)).time() <= end_time):
-                    writer.writerow((row[0], row[1], row[2], atm_machines))
+                    writer.writerow((row[0], row[1], row[2], server_machines))
                 else:
                     writer.writerow((row[0], row[1], row[2], 0))
 
 # extract_lat_long()
-# extract()
+extract()
 
 # def extract_bu_count():
 #     with open('/Users/ramz/Projects/uni/datavis/Assignments/bankworld/app/static/csv/servercount.csv','w') as fp:
@@ -294,65 +294,65 @@ def extract():
 #                              timedetail.get('p3',0), timedetail.get('p4',0), timedetail.get('p5',0)))
 
 # extract_workstation_activity_policy()
-def extract_server_num_conn_count():
-    with open('/Users/ramz/Projects/uni/datavis/visproj/bankworld/app/static/csv/server_connection_new.csv','w') as fp:
-        writer = csv.writer(fp, delimiter=',')
-        for i in range(1,57):
-            if 0 < i <= 10:
-                total_machines = 41000
-                server_machines = 28000
-                atm_machines = 2000
-                ws_machines = 11000
-            elif 51 <= i < 56:
-                total_machines = 50005
-                server_machines = 50000
-                atm_machines = 0
-                ws_machines = 5
-            elif i == 56:
-                total_machines = 15000
-                server_machines = 0
-                atm_machines = 0
-                ws_machines = 15000
-            elif i == 0:
-                total_machines = 15000
-                server_machines = 250000
-                atm_machines = 0
-                ws_machines = 15000
-            else:
-                total_machines = 5500
-                server_machines = 2250
-                atm_machines = 500
-                ws_machines = 2750
-
-            if 51 <= i <= 55:
-                cur.execute("select longitude from region_info_{0} where facility='datacenter-{1}' limit 1".format(i, i-50))
-            else:
-                cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
-            rows = cur.fetchall()
-            lag = longitude_to_timediff(rows[0][0])
-            cur.execute("select healthtime, businessunit, machinefunction,count(ipaddr), avg(numconnections) "
-                        "from region_info_{0} where machineclass='server' group by "
-                        "healthtime, businessunit, machinefunction order by healthtime asc;".format(i))
-            rows = cur.fetchall()
-            print "Query completed for {0}".format(i)
-            start_time = datetime.time(7,0,0)
-            end_time = datetime.time(18,0,0)
-            bu_info = {}
-            for row in rows:
-                time_info = bu_info.get(row[0], {'file_server_reported' : 0, 'multiple_reported' : 0 , 'email_reported' : 0,  'compute_reported' : 0, 'web_reported' : 0,
-                                                 'file_server_avg_conn' : 0, 'multiple_avg_conn' : 0, 'email_avg_conn' : 0, 'compute_avg_conn' : 0, 'web_avg_conn' : 0})
-                time_info['businessunit'] = row[1]
-                if 51 <= i <= 55:
-                    time_info['businessunit'] = "datacenter-{0}".format(i-50)
-
-                time_info['lag'] = lag
-                time_info[row[2].replace(' ','_') +'_reported'] = row[3]
-                time_info[row[2].replace(' ','_') +'_avg_conn'] = row[4]
-                bu_info[row[0]] = time_info
-
-            for key, time_info in sorted(bu_info.items(),key=operator.itemgetter(0)):
-                writer.writerow((key, time_info['businessunit'], lag, time_info['file_server_reported'], time_info['file_server_avg_conn'],
-                                 time_info['multiple_reported'], time_info['multiple_avg_conn'], time_info['email_reported'], time_info['email_avg_conn'],
-                                 time_info['compute_reported'], time_info['compute_avg_conn'], time_info['web_reported'], time_info['web_avg_conn']))
-
-extract_server_num_conn_count()
+# def extract_server_num_conn_count():
+#     with open('/Users/ramz/Projects/uni/datavis/visproj/bankworld/app/static/csv/server_connection_new.csv','w') as fp:
+#         writer = csv.writer(fp, delimiter=',')
+#         for i in range(1,57):
+#             if 0 < i <= 10:
+#                 total_machines = 41000
+#                 server_machines = 28000
+#                 atm_machines = 2000
+#                 ws_machines = 11000
+#             elif 51 <= i < 56:
+#                 total_machines = 50005
+#                 server_machines = 50000
+#                 atm_machines = 0
+#                 ws_machines = 5
+#             elif i == 56:
+#                 total_machines = 15000
+#                 server_machines = 0
+#                 atm_machines = 0
+#                 ws_machines = 15000
+#             elif i == 0:
+#                 total_machines = 15000
+#                 server_machines = 250000
+#                 atm_machines = 0
+#                 ws_machines = 15000
+#             else:
+#                 total_machines = 5500
+#                 server_machines = 2250
+#                 atm_machines = 500
+#                 ws_machines = 2750
+#
+#             if 51 <= i <= 55:
+#                 cur.execute("select longitude from region_info_{0} where facility='datacenter-{1}' limit 1".format(i, i-50))
+#             else:
+#                 cur.execute("select longitude from region_info_{0} where facility='headquarters' limit 1".format(i))
+#             rows = cur.fetchall()
+#             lag = longitude_to_timediff(rows[0][0])
+#             cur.execute("select healthtime, businessunit, machinefunction,count(ipaddr), avg(numconnections) "
+#                         "from region_info_{0} where machineclass='server' group by "
+#                         "healthtime, businessunit, machinefunction order by healthtime asc;".format(i))
+#             rows = cur.fetchall()
+#             print "Query completed for {0}".format(i)
+#             start_time = datetime.time(7,0,0)
+#             end_time = datetime.time(18,0,0)
+#             bu_info = {}
+#             for row in rows:
+#                 time_info = bu_info.get(row[0], {'file_server_reported' : 0, 'multiple_reported' : 0 , 'email_reported' : 0,  'compute_reported' : 0, 'web_reported' : 0,
+#                                                  'file_server_avg_conn' : 0, 'multiple_avg_conn' : 0, 'email_avg_conn' : 0, 'compute_avg_conn' : 0, 'web_avg_conn' : 0})
+#                 time_info['businessunit'] = row[1]
+#                 if 51 <= i <= 55:
+#                     time_info['businessunit'] = "datacenter-{0}".format(i-50)
+#
+#                 time_info['lag'] = lag
+#                 time_info[row[2].replace(' ','_') +'_reported'] = row[3]
+#                 time_info[row[2].replace(' ','_') +'_avg_conn'] = row[4]
+#                 bu_info[row[0]] = time_info
+#
+#             for key, time_info in sorted(bu_info.items(),key=operator.itemgetter(0)):
+#                 writer.writerow((key, time_info['businessunit'], lag, time_info['file_server_reported'], time_info['file_server_avg_conn'],
+#                                  time_info['multiple_reported'], time_info['multiple_avg_conn'], time_info['email_reported'], time_info['email_avg_conn'],
+#                                  time_info['compute_reported'], time_info['compute_avg_conn'], time_info['web_reported'], time_info['web_avg_conn']))
+#
+# extract_server_num_conn_count()

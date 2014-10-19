@@ -202,6 +202,8 @@ class BWDashboard
     @setupEventDispatch()
     @setupPlots()
     @loadData()
+    @curtime = 1
+    @playinterval = 1
 
   setupEventDispatch: ->
     @evdispatch = d3.dispatch("load", "selectRegion", "selectTime", "attime")
@@ -269,8 +271,31 @@ class BWDashboard
         @evdispatch.attime(start_date)
     )
 
+    $("#play").button({
+      text: false,
+      icons: {primary: "ui-icon-play"}}
+    ).click( () =>
+      @playinterval = setInterval( () =>
+        dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
+        start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + @curtime*60000*15)
+        $("#attime").val(start_date.toString())
+        @evdispatch.attime(start_date)
+        @curtime = @curtime + 1
+        if @curtime > 192 then @curtime = 1
+      , 200)
+    )
+
+    $("#stop").button({
+        text: false,
+        icons: {
+          primary: "ui-icon-stop"
+        }
+      }
+    ).click( () =>
+      clearInterval(@playinterval)
+    )
   loadData: ->
-    d3.csv('/static/csv/ws_teller_report_status.csv', (error, data) =>
+    d3.csv('/static/csv/ws_report_status_new.csv', (error, data) =>
       @bw_ws_reported_chart.draw("headquarters", data)
     )
     d3.csv('/static/csv/server_report_status.csv', (error, data) =>
@@ -279,7 +304,6 @@ class BWDashboard
     d3.csv('/static/csv/atm_report_status.csv', (error, data) =>
       @bw_atm_reported_chart.draw("headquarters", data)
     )
-
     d3.csv('/static/csv/ws_connection_new.csv', (error, data) =>
       @bw_ws_conn_chart.load(data)
       @bw_ws_conn_chart.draw("headquarters", data)

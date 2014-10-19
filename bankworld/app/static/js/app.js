@@ -200,7 +200,7 @@
       this.svg.selectAll('circle').on("mouseover.tooltip", (function(_this) {
         return function(d) {
           _this.svg.select('#spread_data_id').remove();
-          return _this.svg.append('text').text(d.businessunit).attr('x', d.x1).attr('y', d.y1).attr('id', 'spread_data_id').attr({
+          return _this.svg.append('text').text(d.businessunit).attr('x', d.x1).attr('y', d.y1 + 10).attr('id', 'spread_data_id').attr({
             stroke: 'blue',
             'stroke-width': '0.5'
           });
@@ -1084,6 +1084,8 @@
       this.setupEventDispatch();
       this.setupPlots();
       this.loadData();
+      this.curtime = 1;
+      this.playinterval = 1;
     }
 
     BWDashboard.prototype.setupEventDispatch = function() {
@@ -1184,7 +1186,7 @@
           };
         })(this)
       });
-      return $("#timeslider").slider({
+      $("#timeslider").slider({
         range: "max",
         min: 0,
         max: 192,
@@ -1200,10 +1202,40 @@
           };
         })(this)
       });
+      $("#play").button({
+        text: false,
+        icons: {
+          primary: "ui-icon-play"
+        }
+      }).click((function(_this) {
+        return function() {
+          return _this.playinterval = setInterval(function() {
+            var dateFormat, start_date;
+            dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+            start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + _this.curtime * 60000 * 15);
+            $("#attime").val(start_date.toString());
+            _this.evdispatch.attime(start_date);
+            _this.curtime = _this.curtime + 1;
+            if (_this.curtime > 192) {
+              return _this.curtime = 1;
+            }
+          }, 200);
+        };
+      })(this));
+      return $("#stop").button({
+        text: false,
+        icons: {
+          primary: "ui-icon-stop"
+        }
+      }).click((function(_this) {
+        return function() {
+          return clearInterval(_this.playinterval);
+        };
+      })(this));
     };
 
     BWDashboard.prototype.loadData = function() {
-      d3.csv('/static/csv/ws_teller_report_status.csv', (function(_this) {
+      d3.csv('/static/csv/ws_report_status_new.csv', (function(_this) {
         return function(error, data) {
           return _this.bw_ws_reported_chart.draw("headquarters", data);
         };

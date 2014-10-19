@@ -179,7 +179,7 @@ class BWMapVirus
     @svg.selectAll('circle').on("mouseover.tooltip",
       (d) =>
         @svg.select('#spread_data_id').remove()
-        @svg.append('text').text(d.businessunit).attr('x', d.x1).attr('y', d.y1).attr('id', 'spread_data_id').attr(
+        @svg.append('text').text(d.businessunit).attr('x', d.x1).attr('y', d.y1+10).attr('id', 'spread_data_id').attr(
           stroke : 'blue'
           'stroke-width': '0.5'
         )

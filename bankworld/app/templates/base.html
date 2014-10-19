@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/styles/main.css">
     <link rel="stylesheet" href="/static/styles/dc.css">
     <link href="/static/styles/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
     <style>
 
         body {
@@ -58,6 +58,12 @@
             font-size: 8px;
             text-anchor: middle;
 
+        }
+
+        #toolbar {
+            margin-left: 20px;
+            padding: 4px;
+            display: inline-block;
         }
 
     </style>
@@ -108,6 +114,10 @@
                 <input type="text" id="attime" readonly style="border:0; font-weight:bold;">
                 <div id="timeslider" style="left:50px; width:250px">
 
+                </div>
+                <div id="toolbar" class="ui-widget-header ui-corner-all">
+                    <button id="play">play</button>
+                    <button id="stop">stop</button>
                 </div>
             </div>
             <!--<div class="row">-->
