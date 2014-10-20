@@ -209,10 +209,10 @@ class BWDashboard
     @evdispatch = d3.dispatch("load", "selectRegion", "selectTime", "attime")
 
   setupPlots: ->
-    @bw_map_selector = new BWMap(400,300,"#bw_map_selector",@evdispatch)
+#    @bw_map_selector = new BWMap(400,300,"#bw_map_selector",@evdispatch)
 #    @bw_map_selector.draw()
-    @evdispatch.on("attime.map", (time) => @bw_map_selector.draw(time))
-    @bw_map_selector.load()
+#    @evdispatch.on("attime.map", (time) => @bw_map_selector.draw(time))
+#    @bw_map_selector.load()
 
     @bw_map_for_spread = new BWMapVirus(400,300,"#bw_map_for_spread",@evdispatch)
     #    @bw_map_selector.draw()
@@ -261,7 +261,7 @@ class BWDashboard
         end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1])*60000*15)
         $("#start_time").attr("value", start_date.toString())
         $("#end_time").attr("value", end_date.toString())
-#        @evdispatch.selectTime(start_date, end_date)
+        @evdispatch.selectTime(start_date, end_date)
         @heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0])
 
     )
@@ -303,27 +303,27 @@ class BWDashboard
       clearInterval(@playinterval)
     )
   loadData: ->
-#    d3.csv('/static/csv/ws_report_status_new.csv', (error, data) =>
-#      @bw_ws_reported_chart.draw("headquarters", data)
-#    )
-#    d3.csv('/static/csv/server_report_status.csv', (error, data) =>
-#      @bw_server_reported_chart.draw("headquarters", data)
-#    )
-#    d3.csv('/static/csv/atm_report_status.csv', (error, data) =>
-#      @bw_atm_reported_chart.draw("headquarters", data)
-#    )
-#    d3.csv('/static/csv/ws_connection_new.csv', (error, data) =>
-#      @bw_ws_conn_chart.load(data)
-#      @bw_ws_conn_chart.draw("headquarters", data)
-#    )
-#    d3.csv('/static/csv/server_connection_new.csv', (error, data) =>
-#      @bw_server_conn_chart.load(data)
-#      @bw_server_conn_chart.draw("headquarters", data)
-#    )
-#    d3.csv('/static/csv/overall_policy_activity_status_new.csv', (error, data) =>
-#      @bw_policy_chart.load(data)
-#      @bw_policy_chart.draw("headquarters")
-#    )
+    d3.csv('/static/csv/ws_report_status_new.csv', (error, data) =>
+      @bw_ws_reported_chart.draw("headquarters", data)
+    )
+    d3.csv('/static/csv/server_report_status.csv', (error, data) =>
+      @bw_server_reported_chart.draw("headquarters", data)
+    )
+    d3.csv('/static/csv/atm_report_status.csv', (error, data) =>
+      @bw_atm_reported_chart.draw("headquarters", data)
+    )
+    d3.csv('/static/csv/ws_connection_new.csv', (error, data) =>
+      @bw_ws_conn_chart.load(data)
+      @bw_ws_conn_chart.draw("headquarters", data)
+    )
+    d3.csv('/static/csv/server_connection_new.csv', (error, data) =>
+      @bw_server_conn_chart.load(data)
+      @bw_server_conn_chart.draw("headquarters", data)
+    )
+    d3.csv('/static/csv/overall_policy_activity_status_new.csv', (error, data) =>
+      @bw_policy_chart.load(data)
+      @bw_policy_chart.draw("headquarters")
+    )
 
 b = new BWDashboard()
 

@@ -1390,13 +1390,6 @@
     };
 
     BWDashboard.prototype.setupPlots = function() {
-      this.bw_map_selector = new BWMap(400, 300, "#bw_map_selector", this.evdispatch);
-      this.evdispatch.on("attime.map", (function(_this) {
-        return function(time) {
-          return _this.bw_map_selector.draw(time);
-        };
-      })(this));
-      this.bw_map_selector.load();
       this.bw_map_for_spread = new BWMapVirus(400, 300, "#bw_map_for_spread", this.evdispatch);
       this.evdispatch.on("attime.mapspread", (function(_this) {
         return function(time) {
@@ -1488,6 +1481,7 @@
             end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
             $("#start_time").attr("value", start_date.toString());
             $("#end_time").attr("value", end_date.toString());
+            _this.evdispatch.selectTime(start_date, end_date);
             return _this.heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0]);
           };
         })(this)
@@ -1540,7 +1534,41 @@
       })(this));
     };
 
-    BWDashboard.prototype.loadData = function() {};
+    BWDashboard.prototype.loadData = function() {
+      d3.csv('/static/csv/ws_report_status_new.csv', (function(_this) {
+        return function(error, data) {
+          return _this.bw_ws_reported_chart.draw("headquarters", data);
+        };
+      })(this));
+      d3.csv('/static/csv/server_report_status.csv', (function(_this) {
+        return function(error, data) {
+          return _this.bw_server_reported_chart.draw("headquarters", data);
+        };
+      })(this));
+      d3.csv('/static/csv/atm_report_status.csv', (function(_this) {
+        return function(error, data) {
+          return _this.bw_atm_reported_chart.draw("headquarters", data);
+        };
+      })(this));
+      d3.csv('/static/csv/ws_connection_new.csv', (function(_this) {
+        return function(error, data) {
+          _this.bw_ws_conn_chart.load(data);
+          return _this.bw_ws_conn_chart.draw("headquarters", data);
+        };
+      })(this));
+      d3.csv('/static/csv/server_connection_new.csv', (function(_this) {
+        return function(error, data) {
+          _this.bw_server_conn_chart.load(data);
+          return _this.bw_server_conn_chart.draw("headquarters", data);
+        };
+      })(this));
+      return d3.csv('/static/csv/overall_policy_activity_status_new.csv', (function(_this) {
+        return function(error, data) {
+          _this.bw_policy_chart.load(data);
+          return _this.bw_policy_chart.draw("headquarters");
+        };
+      })(this));
+    };
 
     return BWDashboard;
 
