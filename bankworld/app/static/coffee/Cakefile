@@ -5,6 +5,7 @@ coffeeFiles = [
     'bwmaps.coffee'
     'activity_and_policy.coffee'
     'connections.coffee'
+    'heatmap.coffee'
     'dashboard.coffee'
 ]
 
