@@ -2,11 +2,14 @@ from flask import Flask
 from flask.ext.bootstrap import Bootstrap
 from config import config
 from flask_cake import Cake
-import psycopg2
+# import psycopg2
 
 bwinfo = 0
-conn = psycopg2.connect("dbname=ramz user=ramz")
-cur = conn.cursor()
+# conn = psycopg2.connect("dbname=ramz user=ramz")
+# cur = conn.cursor()
+conn = 1
+cur = 1
+
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
