@@ -908,7 +908,7 @@
     };
 
     HeatMap.prototype.draw = function(start_time, end_time, timecount) {
-      var dataset, dataset2, i, rectHeight, showregion, showtime, svgHeat, svgLegend, title, xAxis, xGrid, xLabel, xScaleHeat, yAxis, yLabel, yScaleHeat, _i, _j, _len, _ref, _ref1;
+      var button, color_scale, dataset, dataset2, i, local_global_button, rectHeight, showregion, showtime, svgHeat, title, xAxis, xGrid, xLabel, xScaleHeat, yAxis, yLabel, yScaleHeat, _i, _j, _len, _ref, _ref1;
       if (start_time == null) {
         start_time = null;
       }
@@ -920,6 +920,58 @@
       }
       dataset = this.alldata;
       dataset2 = this.alllocdata;
+      d3.select(this.parent).select("#heat_pol_button").remove();
+      d3.select(this.parent).select("#heat_data_button").remove();
+      color_scale = d3.scale.category10().domain(["pol1", "pol2", "pol3", "pol4", "pol5", "act1", "act2", "act3", "act4", "act5"]);
+      button = d3.select(this.parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(["pol1", "pol2", "pol3", "pol4", "pol5", "act1", "act2", "act3", "act4", "act5"]).enter().append('button').attr("type", "button").attr({
+        "class": "btn btn-xs",
+        id: function(d) {
+          return d;
+        }
+      }).style('background-color', function(d) {
+        return color_scale(d);
+      }).text(function(d) {
+        return d;
+      });
+      local_global_button = d3.select(this.parent).append("div").attr("id", "heat_data_button").selectAll('button').data(["local", "global"]).enter().append('button').attr("type", "button").attr({
+        "class": "btn btn-xs",
+        id: "local"
+      }).text(function(d) {
+        return d;
+      });
+      local_global_button.on("click", (function(_this) {
+        return function(elem) {
+          if (elem === "local") {
+            return d3.csv('/static/csv/everything_5_loc.csv', function(d) {
+              return d3.csv('/static/csv/heat_latlong.csv', function(c) {
+                _this.load(d, c);
+                return _this.draw();
+              });
+            });
+          } else {
+            return d3.csv('/static/csv/everything_5_glob.csv', function(d) {
+              return d3.csv('/static/csv/heat_latlong.csv', function(c) {
+                _this.load(d, c);
+                return _this.draw();
+              });
+            });
+          }
+        };
+      })(this));
+      button.on("click", (function(_this) {
+        return function(d) {
+          if (__indexOf.call(_this.colPick, d) < 0) {
+            _this.colPick.push(d);
+          } else {
+            _this.colPick = _this.colPick.filter(function(val) {
+              return d !== val;
+            });
+          }
+          _this.rectWidth = (_this.width - 2 * _this.padding) / _this.regions.length;
+          _this.innerRectWidth = _this.rectWidth / _this.colPick.length;
+          return _this.draw();
+        };
+      })(this));
       dataset = dataset.filter((function(_this) {
         return function(d) {
           var _ref;
@@ -930,7 +982,6 @@
           }
         };
       })(this));
-      console.log(dataset);
       rectHeight = (this.height - 2 * this.padding) / (timecount + 1);
       xScaleHeat = d3.scale.ordinal().domain(this.regions).rangeBands([this.padding, this.width - this.padding]);
       yScaleHeat = d3.time.scale().range([this.padding, this.height - this.padding - rectHeight]);
@@ -1018,7 +1069,12 @@
           mouseout: function(d) {
             svgHeat.select('#showregion').remove();
             return svgHeat.select('#showtime').remove();
-          }
+          },
+          click: (function(_this) {
+            return function(d) {
+              return _this.evDispatch.selectRegion(d.regionold);
+            };
+          })(this)
         });
       }
       xLabel = svgHeat.append('g').call(xAxis).attr({
@@ -1049,7 +1105,7 @@
       }).style({
         opacity: 0.5
       });
-      title = svgHeat.selectAll('.title').data(this.colPick).enter().append('text').text((function(_this) {
+      return title = svgHeat.selectAll('.title').data(this.colPick).enter().append('text').text((function(_this) {
         return function(d, i) {
           if (i === 0) {
             return _this.colPick[i];
@@ -1076,53 +1132,6 @@
           };
         })(this),
         "font-size": 30
-      });
-      svgLegend = d3.select(this.parent).append('svg').attr({
-        width: this.legendWidth,
-        height: this.legendHeight
-      });
-      svgLegend.selectAll('rect').data(this.colPick).enter().append('rect').attr({
-        x: (function(_this) {
-          return function(d, i) {
-            return _this.legendPadding + i * (_this.legendWidth - 2 * _this.legendPadding) / _this.colPick.length;
-          };
-        })(this),
-        y: this.legendPadding,
-        width: (this.legendWidth - 2 * this.legendPadding) / this.colPick.length,
-        height: this.legendHeight / 3,
-        fill: (function(_this) {
-          return function(d) {
-            return _this.palette[d];
-          };
-        })(this)
-      });
-      svgLegend.selectAll('text').data(this.colPick).enter().append('text').text((function(_this) {
-        return function(d, i) {
-          return _this.colPick[i];
-        };
-      })(this)).attr({
-        x: (function(_this) {
-          return function(d, i) {
-            return _this.legendPadding + i * (_this.legendWidth - 2 * _this.legendPadding) / _this.colPick.length + 0.5 * (_this.legendWidth - 2 * _this.legendPadding) / _this.colPick.length;
-          };
-        })(this),
-        y: this.legendPadding / 1.1,
-        stroke: "black",
-        "stroke-width": 1,
-        "text-anchor": "middle",
-        "font-size": 20
-      });
-      svgLegend.append('text').text('REGION #').attr({
-        x: (this.legendWidth - 2 * this.legendPadding) / 2,
-        y: 250,
-        fill: "black",
-        'font-size': 30
-      });
-      return svgLegend.append('text').text('TIME t').attr({
-        x: 0,
-        y: this.legendHeight / 2,
-        fill: "black",
-        'font-size': 30
       });
     };
 
@@ -1468,8 +1477,8 @@
           return _this.bw_policy_chart.draw(region);
         };
       })(this));
-      this.heatmap = new HeatMap(1400, 900, '#global_heat_map');
-      d3.csv('/static/csv/everything_4_loc.csv', (function(_this) {
+      this.heatmap = new HeatMap(1400, 900, '#global_heat_map', "Heat Map", this.evdispatch);
+      d3.csv('/static/csv/everything_5_loc.csv', (function(_this) {
         return function(d) {
           return d3.csv('/static/csv/heat_latlong.csv', function(c) {
             _this.heatmap.load(d, c);
@@ -1477,6 +1486,24 @@
           });
         };
       })(this));
+      $("#slider-range-for-heat").slider({
+        range: true,
+        min: 0,
+        max: 192,
+        step: 1,
+        values: [0, 192],
+        slide: (function(_this) {
+          return function(event, ui) {
+            var dateFormat, end_date, start_date;
+            dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+            start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0] * 60000 * 15);
+            end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
+            $("#start_time").attr("value", start_date.toString());
+            $("#end_time").attr("value", end_date.toString());
+            return _this.heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0]);
+          };
+        })(this)
+      });
       $("#slider-range").slider({
         range: true,
         min: 0,
@@ -1491,8 +1518,7 @@
             end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
             $("#start_time").attr("value", start_date.toString());
             $("#end_time").attr("value", end_date.toString());
-            _this.evdispatch.selectTime(start_date, end_date);
-            return _this.heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0]);
+            return _this.evdispatch.selectTime(start_date, end_date);
           };
         })(this)
       });

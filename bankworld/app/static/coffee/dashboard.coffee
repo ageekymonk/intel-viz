@@ -243,11 +243,27 @@ class BWDashboard
     @bw_policy_chart = new MultiTimeSeriesPolicyChart(760,200,"#bw_policy_chart","Policy & Activity Flag",@evdispatch)
     @evdispatch.on("selectRegion.policy", (region) => @bw_policy_chart.draw(region))
 
-    @heatmap = new HeatMap(1400,900,'#global_heat_map')
-    d3.csv('/static/csv/everything_4_loc.csv', (d)=>
+    @heatmap = new HeatMap(1400,900,'#global_heat_map', "Heat Map", @evdispatch)
+    d3.csv('/static/csv/everything_5_loc.csv', (d)=>
       d3.csv('/static/csv/heat_latlong.csv', (c)=>
         @heatmap.load d,c
         @heatmap.draw() ))
+
+    $("#slider-range-for-heat" ).slider(
+      range: true,
+      min: 0,
+      max: 192,
+      step: 1,
+      values: [ 0,192 ],
+      slide: ( event, ui ) =>
+        dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
+        start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0]*60000*15)
+        end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1])*60000*15)
+        $("#start_time").attr("value", start_date.toString())
+        $("#end_time").attr("value", end_date.toString())
+        @heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0])
+
+    )
 
     $("#slider-range" ).slider(
       range: true,
@@ -262,10 +278,7 @@ class BWDashboard
         $("#start_time").attr("value", start_date.toString())
         $("#end_time").attr("value", end_date.toString())
         @evdispatch.selectTime(start_date, end_date)
-        @heatmap.draw(start_date, end_date, ui.values[1] - ui.values[0])
-
     )
-
     $("#timeslider" ).slider(
       range: "max",
       min: 0,

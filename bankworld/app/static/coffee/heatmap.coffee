@@ -111,16 +111,53 @@ class HeatMap
   draw: (start_time=null, end_time=null, timecount=192) ->
     dataset = @alldata
     dataset2 = @alllocdata
-    
+
+    d3.select(@parent).select("#heat_pol_button").remove()
+    d3.select(@parent).select("#heat_data_button").remove()
+
+    color_scale = d3.scale.category10().domain(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
+    button = d3.select(@parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
+    .enter().append('button').attr("type", "button").attr(
+      class: "btn btn-xs"
+      id: (d) -> d
+    ).style('background-color', (d) -> color_scale(d)).text((d) -> d)
+
+    local_global_button = d3.select(@parent).append("div").attr("id", "heat_data_button").selectAll('button').data(["local", "global"]).enter().append('button').attr("type", "button")
+    .attr(
+      class: "btn btn-xs"
+      id: "local"
+    ).text((d) -> d)
+
+    local_global_button.on("click", (elem) =>
+      if elem == "local"
+        d3.csv('/static/csv/everything_5_loc.csv', (d) =>
+          d3.csv('/static/csv/heat_latlong.csv', (c)=>
+            @load d,c
+            @draw() ))
+      else
+        d3.csv('/static/csv/everything_5_glob.csv', (d)=>
+          d3.csv('/static/csv/heat_latlong.csv', (c)=>
+            @load d,c
+            @draw() ))
+    )
+
+    # TODO: Toggle the active and inactive state for the button
+    button.on("click", (d) =>
+      if d not in @colPick
+        @colPick.push(d)
+      else
+        @colPick = @colPick.filter( (val) => d != val )
+      @rectWidth = (@width-2*@padding)/@regions.length
+      @innerRectWidth = (@rectWidth)/@colPick.length
+      @draw())
+
     dataset = dataset.filter( (d) =>
       if start_time != null and end_time != null
         start_time <= d.timestamp <= end_time
       else
         true
     )
-    console.log dataset
-#    times = @reverseTimes.filter((b) => start_time.toString() <= b and end_time.toString() >= b)
-#    timelabels = @reverseTimeLabels.filter((b) => start_time.toString() <= b and end_time.toString() >= b)
+
     rectHeight = (@height-2*@padding)/(timecount+1)
 
     #  heatRectScale = d3.scale.ordinal()
@@ -236,6 +273,8 @@ class HeatMap
           mouseout: (d)->
             svgHeat.select('#showregion').remove()
             svgHeat.select('#showtime').remove()
+          click: (d) =>
+            @evDispatch.selectRegion(d.regionold)
         )
 
     xLabel = svgHeat.append('g')
@@ -314,60 +353,60 @@ class HeatMap
         "font-size": 30
         )
 
-    svgLegend = d3.select(@parent)
-      .append('svg')
-      .attr(
-        width: @legendWidth
-        height: @legendHeight
-      )
-
-    svgLegend.selectAll('rect')
-      .data(@colPick)
-      .enter()
-      .append('rect')
-      .attr(
-        x: (d,i)=>
-          @legendPadding + i*(@legendWidth-2*@legendPadding)/@colPick.length
-        y: @legendPadding
-        width: (@legendWidth-2*@legendPadding)/@colPick.length
-        height: @legendHeight/3
-        fill: (d)=>
-          @palette[d]
-        )
-
-    svgLegend.selectAll('text')
-      .data(@colPick)
-      .enter()
-      .append('text')
-      .text((d, i)=>
-        @colPick[i]
-      )
-      .attr(
-        x: (d,i)=>
-          @legendPadding + i*(@legendWidth-2*@legendPadding)/@colPick.length + 0.5*(@legendWidth-2*@legendPadding)/@colPick.length
-        y: @legendPadding/1.1
-        stroke: "black"
-        "stroke-width": 1
-        "text-anchor": "middle"
-        "font-size": 20
-      )
-
-
-    svgLegend.append('text')
-      .text('REGION #')
-      .attr(
-        x: (@legendWidth-2*@legendPadding)/2
-        y: 250
-        fill: "black"
-        'font-size': 30)
-
-    svgLegend.append('text')
-      .text('TIME t')
-      .attr(
-        x: 0
-        y: @legendHeight/2
-        fill: "black"
-        'font-size': 30)
+#    svgLegend = d3.select(@parent)
+#      .append('svg')
+#      .attr(
+#        width: @legendWidth
+#        height: @legendHeight
+#      )
+#
+#    svgLegend.selectAll('rect')
+#      .data(@colPick)
+#      .enter()
+#      .append('rect')
+#      .attr(
+#        x: (d,i)=>
+#          @legendPadding + i*(@legendWidth-2*@legendPadding)/@colPick.length
+#        y: @legendPadding
+#        width: (@legendWidth-2*@legendPadding)/@colPick.length
+#        height: @legendHeight/3
+#        fill: (d)=>
+#          @palette[d]
+#        )
+#
+#    svgLegend.selectAll('text')
+#      .data(@colPick)
+#      .enter()
+#      .append('text')
+#      .text((d, i)=>
+#        @colPick[i]
+#      )
+#      .attr(
+#        x: (d,i)=>
+#          @legendPadding + i*(@legendWidth-2*@legendPadding)/@colPick.length + 0.5*(@legendWidth-2*@legendPadding)/@colPick.length
+#        y: @legendPadding/1.1
+#        stroke: "black"
+#        "stroke-width": 1
+#        "text-anchor": "middle"
+#        "font-size": 20
+#      )
+#
+#
+#    svgLegend.append('text')
+#      .text('REGION #')
+#      .attr(
+#        x: (@legendWidth-2*@legendPadding)/2
+#        y: 250
+#        fill: "black"
+#        'font-size': 30)
+#
+#    svgLegend.append('text')
+#      .text('TIME t')
+#      .attr(
+#        x: 0
+#        y: @legendHeight/2
+#        fill: "black"
+#        'font-size': 30)
   
   
 
