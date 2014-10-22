@@ -332,13 +332,23 @@
       });
     };
 
-    MultiTimeSeriesPolicyChart.prototype.draw = function(region) {
+    MultiTimeSeriesPolicyChart.prototype.draw = function(region, start_time, end_time) {
       var button, canvas, color_scale, data, svg, x, xAxis, y, yAxis;
       if (region == null) {
         region = "headquarters";
       }
-      this.curregion = region;
-      color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]);
+      if (start_time == null) {
+        start_time = null;
+      }
+      if (end_time == null) {
+        end_time = null;
+      }
+      if (region !== "none") {
+        this.curregion = region;
+      } else {
+        region = this.curregion;
+      }
+      color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p5", "p4", "a1", "a2", "a3", "a4", "a5"]);
       button = d3.select(this.parent).selectAll("button").data(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4", "a5"]).enter().append('button').attr("type", "button").attr({
         "class": "btn btn-xs",
         id: function(d) {
@@ -364,6 +374,16 @@
       data = this.allbudata.filter((function(_this) {
         return function(d) {
           return d.businessunit === region;
+        };
+      })(this));
+      data = data.filter((function(_this) {
+        return function(d) {
+          var _ref;
+          if (start_time !== null && end_time !== null) {
+            return (start_time <= (_ref = d.timestamp) && _ref <= end_time);
+          } else {
+            return true;
+          }
         };
       })(this));
       d3.select(this.parent).selectAll("svg").remove();
@@ -507,12 +527,22 @@
       });
     };
 
-    WsConnectionsChart.prototype.draw = function(region) {
+    WsConnectionsChart.prototype.draw = function(region, start_time, end_time) {
       var button, canvas, color_scale, data, svg, x, xAxis, y, yAxis;
       if (region == null) {
         region = "headquarters";
       }
-      this.curregion = region;
+      if (start_time == null) {
+        start_time = null;
+      }
+      if (end_time == null) {
+        end_time = null;
+      }
+      if (region !== "none") {
+        this.curregion = region;
+      } else {
+        region = this.curregion;
+      }
       color_scale = d3.scale.category10().domain(["teller", "loan", "office"]);
       button = d3.select(this.parent).selectAll("button").data(["teller", "loan", "office"]).enter().append('button').attr("type", "button").attr({
         "class": "btn btn-xs",
@@ -539,6 +569,16 @@
       data = this.allbudata.filter((function(_this) {
         return function(d) {
           return d.businessunit === region;
+        };
+      })(this));
+      data = data.filter((function(_this) {
+        return function(d) {
+          var _ref;
+          if (start_time !== null && end_time !== null) {
+            return (start_time <= (_ref = d.timestamp) && _ref <= end_time);
+          } else {
+            return true;
+          }
         };
       })(this));
       d3.select(this.parent).selectAll("svg").remove();
@@ -682,12 +722,22 @@
       });
     };
 
-    ServerConnectionsChart.prototype.draw = function(region) {
+    ServerConnectionsChart.prototype.draw = function(region, start_time, end_time) {
       var button, canvas, color_scale, data, svg, x, xAxis, y, yAxis;
       if (region == null) {
         region = "headquarters";
       }
-      this.curregion = region;
+      if (start_time == null) {
+        start_time = null;
+      }
+      if (end_time == null) {
+        end_time = null;
+      }
+      if (region !== "none") {
+        this.curregion = region;
+      } else {
+        region = this.curregion;
+      }
       color_scale = d3.scale.category10().domain(["file_server", "multiple", "email", "compute", "web"]);
       button = d3.select(this.parent).selectAll("button").data(["file_server", "multiple", "email", "compute", "web"]).enter().append('button').attr("type", "button").attr({
         "class": "btn btn-xs",
@@ -716,7 +766,16 @@
           return d.businessunit === region;
         };
       })(this));
-      console.log(data);
+      data = data.filter((function(_this) {
+        return function(d) {
+          var _ref;
+          if (start_time !== null && end_time !== null) {
+            return (start_time <= (_ref = d.timestamp) && _ref <= end_time);
+          } else {
+            return true;
+          }
+        };
+      })(this));
       d3.select(this.parent).selectAll("svg").remove();
       canvas = d3.select(this.parent).append('svg').attr({
         width: this.width + this.margin.left + this.margin.right,
@@ -1459,7 +1518,7 @@
       })(this));
       this.evdispatch.on("selectTime.bw_ws_conn_chart", (function(_this) {
         return function(start, end) {
-          return _this.bw_ws_conn_chart.draw(null);
+          return _this.bw_ws_conn_chart.draw("none", start, end);
         };
       })(this));
       this.bw_server_conn_chart = new ServerConnectionsChart(760, 200, "#bw_server_conn_chart", "Server Connections");
@@ -1470,13 +1529,18 @@
       })(this));
       this.evdispatch.on("selectTime.bw_server_conn_chart", (function(_this) {
         return function(start, end) {
-          return _this.bw_server_conn_chart.draw(null);
+          return _this.bw_server_conn_chart.draw("none", start, end);
         };
       })(this));
       this.bw_policy_chart = new MultiTimeSeriesPolicyChart(760, 200, "#bw_policy_chart", "Policy & Activity Flag", this.evdispatch);
       this.evdispatch.on("selectRegion.policy", (function(_this) {
         return function(region) {
           return _this.bw_policy_chart.draw(region);
+        };
+      })(this));
+      this.evdispatch.on("selectTime.policy", (function(_this) {
+        return function(start, end) {
+          return _this.bw_policy_chart.draw("none", start, end);
         };
       })(this));
       this.heatmap = new HeatMap(1400, 900, '#global_heat_map', "Heat Map", this.evdispatch);
@@ -1518,8 +1582,8 @@
             dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
             start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0] * 60000 * 15);
             end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1]) * 60000 * 15);
-            $("#start_time").attr("value", start_date.toString());
-            $("#end_time").attr("value", end_date.toString());
+            $("#start_time").val(start_date.toString());
+            $("#end_time").val(end_date.toString());
             return _this.evdispatch.selectTime(start_date, end_date);
           };
         })(this)

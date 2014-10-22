@@ -18,8 +18,11 @@ class WsConnectionsChart
       d.timestamp = dateFormat.parse(d.healthtime)
     )
 
-  draw: (region="headquarters") ->
-    @curregion = region
+  draw: (region="headquarters",start_time=null,end_time=null) ->
+    if region != "none"
+      @curregion = region
+    else
+      region = @curregion
 
     color_scale = d3.scale.category10().domain(["teller", "loan", "office"])
     button = d3.select(@parent).selectAll("button").data(["teller", "loan", "office"])
@@ -37,6 +40,13 @@ class WsConnectionsChart
       @draw(@curregion))
 
     data = @allbudata.filter( (d) => d.businessunit == region)
+
+    data = data.filter( (d) =>
+      if start_time != null and end_time != null
+        start_time <= d.timestamp <= end_time
+      else
+        true
+    )
 
     d3.select(@parent).selectAll("svg").remove()
     canvas = d3.select(@parent).append('svg').attr(
@@ -145,8 +155,11 @@ class ServerConnectionsChart
       d.timestamp = dateFormat.parse(d.healthtime)
     )
 
-  draw: (region="headquarters") ->
-    @curregion = region
+  draw: (region="headquarters",start_time=null,end_time=null) ->
+    if region != "none"
+      @curregion = region
+    else
+      region = @curregion
 
     color_scale = d3.scale.category10().domain(["file_server", "multiple", "email", "compute", "web"])
     button = d3.select(@parent).selectAll("button").data(["file_server", "multiple", "email", "compute", "web"])
@@ -164,7 +177,12 @@ class ServerConnectionsChart
       @draw(@curregion))
 
     data = @allbudata.filter( (d) => d.businessunit == region)
-    console.log(data)
+    data = data.filter( (d) =>
+      if start_time != null and end_time != null
+        start_time <= d.timestamp <= end_time
+      else
+        true
+    )
 
     d3.select(@parent).selectAll("svg").remove()
     canvas = d3.select(@parent).append('svg').attr(

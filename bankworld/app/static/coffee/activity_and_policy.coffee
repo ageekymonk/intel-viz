@@ -18,10 +18,12 @@ class MultiTimeSeriesPolicyChart
       d.timestamp = dateFormat.parse(d.healthtime)
     )
 
-  draw: (region="headquarters") ->
-    @curregion = region
-
-    color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4","p5", "a1", "a2", "a3", "a4","a5"])
+  draw: (region="headquarters",start_time=null,end_time=null) ->
+    if region != "none"
+      @curregion = region
+    else
+      region = @curregion
+    color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p5", "p4", "a1", "a2", "a3", "a4","a5"])
     button = d3.select(@parent).selectAll("button").data(["p1", "p2", "p3", "p4","p5", "a1", "a2", "a3", "a4","a5"])
     .enter().append('button').attr("type", "button").attr(
       class: "btn btn-xs"
@@ -37,6 +39,13 @@ class MultiTimeSeriesPolicyChart
       @draw(@curregion))
 
     data = @allbudata.filter( (d) => d.businessunit == region)
+
+    data = data.filter( (d) =>
+      if start_time != null and end_time != null
+        start_time <= d.timestamp <= end_time
+      else
+        true
+    )
 
     d3.select(@parent).selectAll("svg").remove()
     canvas = d3.select(@parent).append('svg').attr(

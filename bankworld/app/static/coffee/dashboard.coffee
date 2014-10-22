@@ -234,14 +234,15 @@ class BWDashboard
 
     @bw_ws_conn_chart = new WsConnectionsChart(760,200,"#bw_ws_conn_chart", "WS Connections")
     @evdispatch.on("selectRegion.bw_ws_conn_chart", (region) => @bw_ws_conn_chart.draw(region))
-    @evdispatch.on("selectTime.bw_ws_conn_chart", (start,end) => @bw_ws_conn_chart.draw(null))
+    @evdispatch.on("selectTime.bw_ws_conn_chart", (start,end) => @bw_ws_conn_chart.draw("none",start,end))
 
     @bw_server_conn_chart = new ServerConnectionsChart(760,200,"#bw_server_conn_chart", "Server Connections")
     @evdispatch.on("selectRegion.bw_server_conn_chart", (region) => @bw_server_conn_chart.draw(region))
-    @evdispatch.on("selectTime.bw_server_conn_chart", (start,end) => @bw_server_conn_chart.draw(null))
+    @evdispatch.on("selectTime.bw_server_conn_chart", (start,end) => @bw_server_conn_chart.draw("none",start,end))
 
     @bw_policy_chart = new MultiTimeSeriesPolicyChart(760,200,"#bw_policy_chart","Policy & Activity Flag",@evdispatch)
     @evdispatch.on("selectRegion.policy", (region) => @bw_policy_chart.draw(region))
+    @evdispatch.on("selectTime.policy", (start,end) => @bw_policy_chart.draw("none", start,end))
 
     @heatmap = new HeatMap(1400,900,'#global_heat_map', "Heat Map", @evdispatch)
     d3.csv('/static/csv/everything_5_loc.csv', (d)=>
@@ -275,8 +276,8 @@ class BWDashboard
         dateFormat = d3.time.format("%Y-%m-%d %H:%M:%S")
         start_date = new Date(dateFormat.parse("2012-02-02 08:00:00").getTime() + +ui.values[0]*60000*15)
         end_date = new Date(dateFormat.parse("2012-02-04 08:00:00").getTime() - (192 - +ui.values[1])*60000*15)
-        $("#start_time").attr("value", start_date.toString())
-        $("#end_time").attr("value", end_date.toString())
+        $("#start_time").val(start_date.toString())
+        $("#end_time").val(end_date.toString())
         @evdispatch.selectTime(start_date, end_date)
     )
     $("#timeslider" ).slider(
