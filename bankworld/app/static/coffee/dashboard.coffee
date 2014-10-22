@@ -88,12 +88,12 @@ class DifferenceChart
     .style("text-anchor", "end")
     .text("Machine Count")
 
-    svg.append("text")
-    .attr("x", (@width / 2))
-    .attr("y", 0 - (@margin.top / 2))
-    .attr("text-anchor", "middle")
-    .attr("class", "chart-title")
-    .text(@title);
+#    svg.append("text")
+#    .attr("x", (@width / 2))
+#    .attr("y", 0 - (@margin.top / 2))
+#    .attr("text-anchor", "middle")
+#    .attr("class", "chart-title")
+#    .text(@title);
 
     legend = svg.append('g')
     legend.append("text").attr("x", @width/2)
@@ -106,7 +106,12 @@ class DifferenceChart
     .attr("y", @height + (@margin.bottom/2)+ 15).attr("class", "legend").style("stroke", "#118bff")
     .text("Up but should be Down")
 
-#    svg.select("g.x.axis").selectAll("g.tick").select("text").attr("transform", "rotate(-90)translate(-20,0)")
+    svg.append("text")
+    .attr("x", (@width / 2))
+    .attr("y", 0 - (@margin.top / 2))
+    .attr("text-anchor", "middle")
+    .attr("class", "chart-title")
+    .text(@curregion + " :  " + @title)
 
 class MultiLineChart
   constructor: (w, h, parent="body", title = "", evDispatch) ->

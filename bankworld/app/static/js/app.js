@@ -1330,13 +1330,13 @@
       svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + this.height + ")").call(xAxis);
       svg.append("g").attr("class", "y axis").call(yAxis);
       canvas.append("text").attr("transform", "translate(0,30) rotate(-90)").attr("y", 10).attr("dy", ".71em").style("text-anchor", "end").text("Machine Count");
-      svg.append("text").attr("x", this.width / 2).attr("y", 0 - (this.margin.top / 2)).attr("text-anchor", "middle").attr("class", "chart-title").text(this.title);
       legend = svg.append('g');
       legend.append("text").attr("x", this.width / 2).attr("y", this.height + (this.margin.bottom / 2) + 5).attr("class", "legend").style({
         stroke: "red",
         "stroke-width": "1px"
       }).text("Down but should be up");
-      return legend.append("text").attr("x", this.width / 2).attr("y", this.height + (this.margin.bottom / 2) + 15).attr("class", "legend").style("stroke", "#118bff").text("Up but should be Down");
+      legend.append("text").attr("x", this.width / 2).attr("y", this.height + (this.margin.bottom / 2) + 15).attr("class", "legend").style("stroke", "#118bff").text("Up but should be Down");
+      return svg.append("text").attr("x", this.width / 2).attr("y", 0 - (this.margin.top / 2)).attr("text-anchor", "middle").attr("class", "chart-title").text(this.curregion + " :  " + this.title);
     };
 
     return DifferenceChart;
