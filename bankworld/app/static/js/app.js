@@ -194,6 +194,7 @@
         "fill-opacity": .8
       }).on("click", (function(_this) {
         return function(d) {
+          $('#myModal').modal();
           return _this.evDispatch.selectRegion(d.businessunit);
         };
       })(this));
@@ -1072,6 +1073,7 @@
           },
           click: (function(_this) {
             return function(d) {
+              $('#myModal').modal();
               return _this.evDispatch.selectRegion(d.regionold);
             };
           })(this)

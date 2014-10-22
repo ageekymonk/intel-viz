@@ -274,6 +274,7 @@ class HeatMap
             svgHeat.select('#showregion').remove()
             svgHeat.select('#showtime').remove()
           click: (d) =>
+            $('#myModal').modal()
             @evDispatch.selectRegion(d.regionold)
         )
 

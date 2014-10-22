@@ -173,6 +173,7 @@ class BWMapVirus
         "fill" : "red"
         "fill-opacity": .8
     ).on("click", (d) =>
+        $('#myModal').modal()
         @evDispatch.selectRegion(d.businessunit))
 
 

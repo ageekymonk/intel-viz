@@ -83,6 +83,107 @@
 <!-- endbower -->
 <!-- endbuild -->
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-left: 40px">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">From</span>
+                                <input type="text" class="form-control" id="start_time">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">To</span>
+                                <input type="text" class="form-control" id="end_time">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br>
+                        <div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 40px">
+
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Machine Avail Status</a></li>
+                        <li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>
+                        <li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>
+                    </ul>
+                    <div class="tab-content">
+
+
+                        <div class="tab-pane active" id="bw_report">
+                            <div class="row">
+                                <div id="bw_ws_reported_chart">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="bw_server_reported_chart">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="bw_atm_reported_chart">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="bw_policy">
+                            <div class="row">
+                                <div id="bw_policy_chart">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="bw_activity">
+                            <div class="row">
+                                <div id="bw_ws_conn_chart">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="bw_server_conn_chart">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="bw_ws_office_conn_chart">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="geo_activity">
+                            <div class="row">
+                                <div id="bw_overall_report">
+
+                                </div>
+                                <div id="bw_overall_policy">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="bw_dashboard">
     <div class="row">
         <div class="col-md-12">
@@ -105,91 +206,7 @@
                             </div>
 
                         </div>
-                        <div class="row" style="margin-left: 40px">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon">From</span>
-                                        <input type="text" class="form-control" id="start_time">
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon">To</span>
-                                        <input type="text" class="form-control" id="end_time">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <br>
-                                <div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">
-                                </div>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-left: 40px">
 
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Machine Avail Status</a></li>
-                                <li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>
-                                <li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>
-                            </ul>
-                            <div class="tab-content">
-
-
-                                <div class="tab-pane active" id="bw_report">
-                                    <div class="row">
-                                        <div id="bw_ws_reported_chart">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="bw_server_reported_chart">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="bw_atm_reported_chart">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="bw_policy">
-                                    <div class="row">
-                                        <div id="bw_policy_chart">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="bw_activity">
-                                    <div class="row">
-                                        <div id="bw_ws_conn_chart">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="bw_server_conn_chart">
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="bw_ws_office_conn_chart">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="geo_activity">
-                                    <div class="row">
-                                        <div id="bw_overall_report">
-
-                                        </div>
-                                        <div id="bw_overall_policy">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="tab-pane" id="overall_map">
 
@@ -204,99 +221,99 @@
                                 <button id="stop">stop</button>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-12">
                             <div id="bw_map_for_spread">
 
                             </div>
                         </div>
 
-                        <div class="col-md-7">
-                            <!--<div class="row">-->
-                                <!--<div class="row">-->
-                                    <!--<div class="col-md-5">-->
-                                        <!--<div class="input-group input-group-sm">-->
-                                            <!--<span class="input-group-addon">From</span>-->
-                                            <!--<input type="text" class="form-control" id="start_time">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-5">-->
-                                        <!--<div class="input-group input-group-sm">-->
-                                            <!--<span class="input-group-addon">To</span>-->
-                                            <!--<input type="text" class="form-control" id="end_time">-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="row">-->
-                                    <!--<br>-->
-                                    <!--<div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">-->
-                                    <!--</div>-->
-                                    <!--<br>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="row">-->
+                        <!--<div class="col-md-7">-->
+                            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<span class="input-group-addon">From</span>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<input type="text" class="form-control" id="start_time">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="col-md-5">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="input-group input-group-sm">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<span class="input-group-addon">To</span>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<input type="text" class="form-control" id="end_time">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<br>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div id="slider-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="left:50px; width:250px">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<br>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
 
-                                <!--<ul class="nav nav-tabs" role="tablist">-->
-                                    <!--<li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Machine Avail Status</a></li>-->
-                                    <!--<li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>-->
-                                    <!--<li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>-->
-                                <!--</ul>-->
-                                <!--<div class="tab-content">-->
+                                <!--&lt;!&ndash;<ul class="nav nav-tabs" role="tablist">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li class="active"><a href="#bw_report" role="tab" data-toggle="tab">Machine Avail Status</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li><a href="#bw_policy" role="tab" data-toggle="tab">Policy & Activity</a></li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<li><a href="#bw_activity" role="tab" data-toggle="tab">Connection Status</a></li>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="tab-content">&ndash;&gt;-->
 
 
-                                    <!--<div class="tab-pane active" id="bw_report">-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_ws_reported_chart">-->
+                                    <!--&lt;!&ndash;<div class="tab-pane active" id="bw_report">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_ws_reported_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_server_reported_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_server_reported_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_atm_reported_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_atm_reported_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="tab-pane" id="bw_policy">-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_policy_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="tab-pane" id="bw_policy">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_policy_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="tab-pane" id="bw_activity">-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_ws_conn_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="tab-pane" id="bw_activity">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_ws_conn_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_server_conn_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_server_conn_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_ws_office_conn_chart">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_ws_office_conn_chart">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="tab-pane" id="geo_activity">-->
-                                        <!--<div class="row">-->
-                                            <!--<div id="bw_overall_report">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="tab-pane" id="geo_activity">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_overall_report">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                            <!--<div id="bw_overall_policy">-->
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                            <!--&lt;!&ndash;<div id="bw_overall_policy">&ndash;&gt;-->
 
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
+                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--</div>-->
                     </div>
 
                 </div>
