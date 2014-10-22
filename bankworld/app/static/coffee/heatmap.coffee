@@ -17,7 +17,7 @@ class HeatMap
     #maxtime =  '2012-02-02 12:00:00'
     @mintime = '2012-02-02 08:30:00'
     @maxtime =  '2012-02-02 08:30:00'
-    @tmin = 0.3
+    @tmin = 0.2
     @tmax = 1
     @choices = ['pol5','pol4','pol3', 'pol2', 'pol1','act1','act2','act3','act4','act5']
 
@@ -27,7 +27,7 @@ class HeatMap
 #    @colPick = ['pol5','pol4','pol3', 'pol2', 'pol1']
 #    @colPick = ['act1','act2','act3','act4','act5']
 #    @colPick = ['act3', 'pol5']
-    @colPick = ['pol5', 'pol1']
+#    @colPick = ['pol5', 'pol1']
 #    @colPick = ['act5']
   
 
@@ -37,6 +37,7 @@ class HeatMap
     #@colPick = ['erspreadmax', 'erspreadmin']
     # region 5 and 10 missing pol 1
     #@colPick = ['pol1', 'pol2']
+#    @colPick = ['pol5']
     #erspreadmin has issues in region 25. policy 1 maintains its ratio relative to the other regions, so it implies that those which are going down are being completely wiped out with a power outage or other mishap, rather than there being some general unhealth in the region. Also seems to be unrelated to the virus instance since the other regions are unaffected by machines going down during hte day. Likewise, region 25 gets it first virus symptoms 2.5 hours after the episode of machines being down is over. Of course this is obscured by the fact that end of day occurs and machines are supposed to be down, so the anomaly disappears. 
     #@colPick = ['pol5', 'pol4', 'pol3','pol2']
   
@@ -53,7 +54,7 @@ class HeatMap
     # machine online deviations from expected. headquarters, region 25. Headquarters has more machines online than expected the whole time!
     #colPick = ['erspreadmax']
     #colPick = ['erspreadmin']
-    #@colPick = ['erspreadmax', 'erspreadmin']
+    @colPick = ['erspreadmax', 'erspreadmin']
 
     @scales = {}
     @palette = {
@@ -110,15 +111,14 @@ class HeatMap
   draw: (start_time=null, end_time=null, timecount=192) ->
     dataset = @alldata
     dataset2 = @alllocdata
-
+    
     dataset = dataset.filter( (d) =>
       if start_time != null and end_time != null
         start_time <= d.timestamp <= end_time
       else
         true
     )
-
-
+    console.log dataset
 #    times = @reverseTimes.filter((b) => start_time.toString() <= b and end_time.toString() >= b)
 #    timelabels = @reverseTimeLabels.filter((b) => start_time.toString() <= b and end_time.toString() >= b)
     rectHeight = (@height-2*@padding)/(timecount+1)
