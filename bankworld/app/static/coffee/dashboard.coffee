@@ -309,7 +309,7 @@ class BWDashboard
         @evdispatch.attime(start_date)
         @curtime = @curtime + 1
         if @curtime > 192 then @curtime = 1
-      , 200)
+      , 100)
     )
 
     $("#stop").button({

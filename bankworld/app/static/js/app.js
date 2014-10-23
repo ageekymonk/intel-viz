@@ -1611,7 +1611,7 @@
             if (_this.curtime > 192) {
               return _this.curtime = 1;
             }
-          }, 200);
+          }, 100);
         };
       })(this));
       return $("#stop").button({
