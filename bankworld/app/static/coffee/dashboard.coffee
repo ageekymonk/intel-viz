@@ -249,8 +249,8 @@ class BWDashboard
     @evdispatch.on("selectRegion.policy", (region) => @bw_policy_chart.draw(region))
     @evdispatch.on("selectTime.policy", (start,end) => @bw_policy_chart.draw("none", start,end))
 
-    @heatmap = new HeatMap(1400,900,'#global_heat_map', "Heat Map", @evdispatch)
-    d3.csv('/static/csv/everything_5_loc.csv', (d)=>
+    @heatmap = new HeatMap(1600,870,'#global_heat_map', "Heat Map", @evdispatch)
+    d3.csv('/static/csv/everything_6_glob.csv', (d)=>
       d3.csv('/static/csv/heat_latlong.csv', (c)=>
         @heatmap.load d,c
         @heatmap.draw() ))

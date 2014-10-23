@@ -914,31 +914,31 @@
       _ref = [700, 300], this.legendWidth = _ref[0], this.legendHeight = _ref[1];
       this.legendPadding = 100;
       this.titleWidth = this.width / 2;
-      this.padding = 200;
+      this.padding = 120;
       this.barPadding = 0.1;
       this.mintime = '2012-02-02 08:30:00';
       this.maxtime = '2012-02-02 08:30:00';
       this.tmin = 0.2;
       this.tmax = 1;
-      this.choices = ['pol5', 'pol4', 'pol3', 'pol2', 'pol1', 'act1', 'act2', 'act3', 'act4', 'act5'];
-      this.colPick = ['erspreadmax', 'erspreadmin'];
+      this.choices = ['pol1', 'pol2', 'pol3', 'pol4', 'pol5', 'act1', 'act2', 'act3', 'act4', 'act5', 'sumnumconnections', 'nightmachinediff', 'daymachinediff'];
+      this.colPick = ['pol3', 'pol4'];
       this.scales = {};
       this.palette = {
         sumnumconnections: 'green',
-        erspreadmax: 'red',
-        erspreadmin: 'blue',
+        nightmachinediff: 'red',
+        daymachinediff: 'blue',
         showregion: 'red',
         showtime: 'red',
-        pol1: '#a6cee3',
-        pol2: 'orange',
-        pol3: 'blue',
-        pol4: '#33a02c',
-        pol5: '#e31a1c',
-        act1: '#b2df8a',
-        act2: '#fb9a99',
-        act3: '#1f78b4',
-        act4: '#ff7f00',
-        act5: '#6a3d9a'
+        pol1: '#1f77b4',
+        pol2: '#ff7f0e',
+        pol3: '#2ca02c',
+        pol4: '#9467bd',
+        pol5: '#d62728',
+        act1: '#8c564b',
+        act2: '#e377c2',
+        act3: '#7f7f7f',
+        act4: '#bcbd22',
+        act5: '#17becf'
       };
       this.regions = ["s-35", "s-34", "L-2", "s-36", "s-11", "L-1", "s-37", "s-49", "s-41", "s-50", "s-33", "s-32", "s-48", "s-39", "s-47", "s-46", "L-8", "s-12", "s-43", "s-13", "s-44", "s-31", "L-9", "s-45", "s-40", "L-3", "s-42", "L-10", "s-14", "s-30", "L-6", "s-15", "s-29", "s-17", "s-16", "s-38", "s-20", "L-5", "s-18", "s-19", "HEAD", "L-7", "s-27", "s-28", "s-23", "L-4", "s-22", "s-21", "s-26", "s-24", "s-25"];
       this.times = ['2012-02-01 23:00:00', '2012-02-01 23:15:00', '2012-02-01 23:30:00', '2012-02-01 23:45:00', '2012-02-02 00:00:00', '2012-02-02 00:15:00', '2012-02-02 00:30:00', '2012-02-02 00:45:00', '2012-02-02 01:00:00', '2012-02-02 01:15:00', '2012-02-02 01:30:00', '2012-02-02 01:45:00', '2012-02-02 02:00:00', '2012-02-02 02:15:00', '2012-02-02 02:30:00', '2012-02-02 02:45:00', '2012-02-02 03:00:00', '2012-02-02 03:15:00', '2012-02-02 03:30:00', '2012-02-02 03:45:00', '2012-02-02 04:00:00', '2012-02-02 04:15:00', '2012-02-02 04:30:00', '2012-02-02 04:45:00', '2012-02-02 05:00:00', '2012-02-02 05:15:00', '2012-02-02 05:30:00', '2012-02-02 05:45:00', '2012-02-02 06:00:00', '2012-02-02 06:15:00', '2012-02-02 06:30:00', '2012-02-02 06:45:00', '2012-02-02 07:00:00', '2012-02-02 07:15:00', '2012-02-02 07:30:00', '2012-02-02 07:45:00', '2012-02-02 08:00:00', '2012-02-02 08:15:00', '2012-02-02 08:30:00', '2012-02-02 08:45:00', '2012-02-02 09:00:00', '2012-02-02 09:15:00', '2012-02-02 09:30:00', '2012-02-02 09:45:00', '2012-02-02 10:00:00', '2012-02-02 10:15:00', '2012-02-02 10:30:00', '2012-02-02 10:45:00', '2012-02-02 11:00:00', '2012-02-02 11:15:00', '2012-02-02 11:30:00', '2012-02-02 11:45:00', '2012-02-02 12:00:00', '2012-02-02 12:15:00', '2012-02-02 12:30:00', '2012-02-02 12:45:00', '2012-02-02 13:00:00', '2012-02-02 13:15:00', '2012-02-02 13:30:00', '2012-02-02 13:45:00', '2012-02-02 14:00:00', '2012-02-02 14:15:00', '2012-02-02 14:30:00', '2012-02-02 14:45:00', '2012-02-02 15:00:00', '2012-02-02 15:15:00', '2012-02-02 15:30:00', '2012-02-02 15:45:00', '2012-02-02 16:00:00', '2012-02-02 16:15:00', '2012-02-02 16:30:00', '2012-02-02 16:45:00', '2012-02-02 17:00:00', '2012-02-02 17:15:00', '2012-02-02 17:30:00', '2012-02-02 17:45:00', '2012-02-02 18:00:00', '2012-02-02 18:15:00', '2012-02-02 18:30:00', '2012-02-02 18:45:00', '2012-02-02 19:00:00', '2012-02-02 19:15:00', '2012-02-02 19:30:00', '2012-02-02 19:45:00', '2012-02-02 20:00:00', '2012-02-02 20:15:00', '2012-02-02 20:30:00', '2012-02-02 20:45:00', '2012-02-02 21:00:00', '2012-02-02 21:15:00', '2012-02-02 21:30:00', '2012-02-02 21:45:00', '2012-02-02 22:00:00', '2012-02-02 22:15:00', '2012-02-02 22:30:00', '2012-02-02 22:45:00', '2012-02-02 23:00:00', '2012-02-02 23:15:00', '2012-02-02 23:30:00', '2012-02-02 23:45:00', '2012-02-03 00:00:00', '2012-02-03 00:15:00', '2012-02-03 00:30:00', '2012-02-03 00:45:00', '2012-02-03 01:00:00', '2012-02-03 01:15:00', '2012-02-03 01:30:00', '2012-02-03 01:45:00', '2012-02-03 02:00:00', '2012-02-03 02:15:00', '2012-02-03 02:30:00', '2012-02-03 02:45:00', '2012-02-03 03:00:00', '2012-02-03 03:15:00', '2012-02-03 03:30:00', '2012-02-03 03:45:00', '2012-02-03 04:00:00', '2012-02-03 04:15:00', '2012-02-03 04:30:00', '2012-02-03 04:45:00', '2012-02-03 05:00:00', '2012-02-03 05:15:00', '2012-02-03 05:30:00', '2012-02-03 05:45:00', '2012-02-03 06:00:00', '2012-02-03 06:15:00', '2012-02-03 06:30:00', '2012-02-03 06:45:00', '2012-02-03 07:00:00', '2012-02-03 07:15:00', '2012-02-03 07:30:00', '2012-02-03 07:45:00', '2012-02-03 08:00:00', '2012-02-03 08:15:00', '2012-02-03 08:30:00', '2012-02-03 08:45:00', '2012-02-03 09:00:00', '2012-02-03 09:15:00', '2012-02-03 09:30:00', '2012-02-03 09:45:00', '2012-02-03 10:00:00', '2012-02-03 10:15:00', '2012-02-03 10:30:00', '2012-02-03 10:45:00', '2012-02-03 11:00:00', '2012-02-03 11:15:00', '2012-02-03 11:30:00', '2012-02-03 11:45:00', '2012-02-03 12:00:00', '2012-02-03 12:15:00', '2012-02-03 12:30:00', '2012-02-03 12:45:00', '2012-02-03 13:00:00', '2012-02-03 13:15:00', '2012-02-03 13:30:00', '2012-02-03 13:45:00', '2012-02-03 14:00:00', '2012-02-03 14:15:00', '2012-02-03 14:30:00', '2012-02-03 14:45:00', '2012-02-03 15:00:00', '2012-02-03 15:15:00', '2012-02-03 15:30:00', '2012-02-03 15:45:00', '2012-02-03 16:00:00', '2012-02-03 16:15:00', '2012-02-03 16:30:00', '2012-02-03 16:45:00', '2012-02-03 17:00:00', '2012-02-03 17:15:00', '2012-02-03 17:30:00', '2012-02-03 17:45:00', '2012-02-03 18:00:00', '2012-02-03 18:15:00', '2012-02-03 18:30:00', '2012-02-03 18:45:00', '2012-02-03 19:00:00', '2012-02-03 19:15:00', '2012-02-03 19:30:00', '2012-02-03 19:45:00', '2012-02-03 20:00:00', '2012-02-03 20:15:00', '2012-02-03 20:30:00', '2012-02-03 20:45:00', '2012-02-03 21:00:00', '2012-02-03 21:15:00', '2012-02-03 21:30:00', '2012-02-03 21:45:00', '2012-02-03 22:00:00', '2012-02-03 22:15:00', '2012-02-03 22:30:00', '2012-02-03 22:45:00', '2012-02-03 23:00:00', '2012-02-03 23:15:00', '2012-02-03 23:30:00', '2012-02-03 23:45:00', '2012-02-04 00:00:00', '2012-02-04 00:15:00', '2012-02-04 00:30:00', '2012-02-04 00:45:00', '2012-02-04 01:00:00', '2012-02-04 01:15:00', '2012-02-04 01:30:00', '2012-02-04 01:45:00', '2012-02-04 02:00:00', '2012-02-04 02:15:00', '2012-02-04 02:30:00', '2012-02-04 02:45:00', '2012-02-04 03:00:00', '2012-02-04 03:15:00', '2012-02-04 03:30:00', '2012-02-04 03:45:00', '2012-02-04 04:00:00', '2012-02-04 04:15:00', '2012-02-04 04:30:00', '2012-02-04 04:45:00', '2012-02-04 05:00:00', '2012-02-04 05:15:00', '2012-02-04 05:30:00', '2012-02-04 05:45:00', '2012-02-04 06:00:00', '2012-02-04 06:15:00', '2012-02-04 06:30:00', '2012-02-04 06:45:00', '2012-02-04 07:00:00', '2012-02-04 07:15:00', '2012-02-04 07:30:00', '2012-02-04 07:45:00', '2012-02-04 08:00:00'];
@@ -968,7 +968,7 @@
     };
 
     HeatMap.prototype.draw = function(start_time, end_time, timecount) {
-      var button, color_scale, dataset, dataset2, i, local_global_button, rectHeight, showregion, showtime, svgHeat, title, xAxis, xGrid, xLabel, xScaleHeat, yAxis, yLabel, yScaleHeat, _i, _j, _len, _ref, _ref1;
+      var button, dataset, dataset2, i, local_global_button, rectHeight, showregion, showtime, svgHeat, title, xAxis, xLabel, xScaleHeat, yAxis, yLabel, yScaleHeat, _i, _j, _len, _ref, _ref1;
       if (start_time == null) {
         start_time = null;
       }
@@ -982,15 +982,16 @@
       dataset2 = this.alllocdata;
       d3.select(this.parent).select("#heat_pol_button").remove();
       d3.select(this.parent).select("#heat_data_button").remove();
-      color_scale = d3.scale.category10().domain(["pol1", "pol2", "pol3", "pol4", "pol5", "act1", "act2", "act3", "act4", "act5"]);
-      button = d3.select(this.parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(["pol1", "pol2", "pol3", "pol4", "pol5", "act1", "act2", "act3", "act4", "act5"]).enter().append('button').attr("type", "button").attr({
+      button = d3.select(this.parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(this.choices).enter().append('button').attr("type", "button").attr({
         "class": "btn btn-xs",
         id: function(d) {
           return d;
         }
-      }).style('background-color', function(d) {
-        return color_scale(d);
-      }).text(function(d) {
+      }).style('background-color', (function(_this) {
+        return function(d) {
+          return _this.palette[d];
+        };
+      })(this)).text(function(d) {
         return d;
       });
       local_global_button = d3.select(this.parent).append("div").attr("id", "heat_data_button").selectAll('button').data(["local", "global"]).enter().append('button').attr("type", "button").attr({
@@ -1066,14 +1067,14 @@
       });
       showtime = (function(_this) {
         return function(d) {
-          return svgHeat.append('text').text(d.toTimeString().slice(0, 9)).attr({
+          return svgHeat.append('text').text(d.toTimeString().slice(0, 5)).attr({
             id: 'showtime',
             x: 0,
             y: yScaleHeat(d),
             stroke: _this.palette['showtime'],
             fill: 'black',
             "font-size": 25,
-            "transform": "translate(" + (_this.padding / 3.5) + ",0)"
+            "transform": "translate(" + (_this.padding / 2.5) + ",0)"
           });
         };
       })(this);
@@ -1098,6 +1099,7 @@
           y: function(d) {
             return yScaleHeat(d['timestamp']);
           },
+          rx: 2,
           width: this.innerRectWidth - 1,
           height: rectHeight - 2 * this.barPadding,
           transform: (function(_this) {
@@ -1142,29 +1144,17 @@
         "class": "axis",
         "transform": "translate(0, " + (this.height - this.padding) + ")"
       }).selectAll('text').attr({
-        "transform": "translate(" + (-this.rectWidth) + ",40) rotate(-90)",
+        "transform": "translate(" + (-this.rectWidth / 1.5) + ",40) rotate(-90)",
         "font-size": 20
       });
       yLabel = svgHeat.append('g').call(yAxis).attr({
         "class": 'axis',
         "stroke-width": 1,
         stroke: 'black',
+        "font-size": 20,
         "transform": "translate(" + this.padding + ",0)"
       }).style({
         'opacity': 0.8
-      });
-      xGrid = svgHeat.selectAll('.xgrid').data(this.regions).enter().append('line').attr({
-        x1: function(d) {
-          return xScaleHeat(d);
-        },
-        x2: function(d) {
-          return xScaleHeat(d);
-        },
-        y1: this.padding,
-        y2: this.height - this.padding,
-        stroke: 'black'
-      }).style({
-        opacity: 0.5
       });
       return title = svgHeat.selectAll('.title').data(this.colPick).enter().append('text').text((function(_this) {
         return function(d, i) {
@@ -1543,8 +1533,8 @@
           return _this.bw_policy_chart.draw("none", start, end);
         };
       })(this));
-      this.heatmap = new HeatMap(1400, 900, '#global_heat_map', "Heat Map", this.evdispatch);
-      d3.csv('/static/csv/everything_5_loc.csv', (function(_this) {
+      this.heatmap = new HeatMap(1600, 870, '#global_heat_map', "Heat Map", this.evdispatch);
+      d3.csv('/static/csv/everything_6_glob.csv', (function(_this) {
         return function(d) {
           return d3.csv('/static/csv/heat_latlong.csv', function(c) {
             _this.heatmap.load(d, c);

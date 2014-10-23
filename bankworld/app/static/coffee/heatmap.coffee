@@ -11,7 +11,7 @@ class HeatMap
     [@legendWidth, @legendHeight] = [700,300]
     @legendPadding = 100
     @titleWidth = @width/2
-    @padding = 200
+    @padding = 120
     @barPadding = 0.1
     #mintime = '2012-02-02 08:30:00'
     #maxtime =  '2012-02-02 12:00:00'
@@ -19,7 +19,7 @@ class HeatMap
     @maxtime =  '2012-02-02 08:30:00'
     @tmin = 0.2
     @tmax = 1
-    @choices = ['pol5','pol4','pol3', 'pol2', 'pol1','act1','act2','act3','act4','act5']
+    @choices = ['pol1','pol2','pol3','pol4','pol5','act1','act2','act3','act4','act5','sumnumconnections','nightmachinediff', 'daymachinediff']
 
 
 #    @colPick = ['sumnumconnections', 'pol5','pol4','pol3', 'pol2', 'pol1','act1','act2','act3','act4','act5']
@@ -34,11 +34,11 @@ class HeatMap
     #Q1 whats happening @ 1400 
     #@colPick = ['pol2', 'pol3', 'pol4', 'pol5']
     # region 25 begins losing machines during the day.
-    #@colPick = ['erspreadmax', 'erspreadmin']
+    #@colPick = ['nightmachinediff', 'daymachinediff']
     # region 5 and 10 missing pol 1
-    #@colPick = ['pol1', 'pol2']
+    @colPick = ['pol3', 'pol4']
 #    @colPick = ['pol5']
-    #erspreadmin has issues in region 25. policy 1 maintains its ratio relative to the other regions, so it implies that those which are going down are being completely wiped out with a power outage or other mishap, rather than there being some general unhealth in the region. Also seems to be unrelated to the virus instance since the other regions are unaffected by machines going down during hte day. Likewise, region 25 gets it first virus symptoms 2.5 hours after the episode of machines being down is over. Of course this is obscured by the fact that end of day occurs and machines are supposed to be down, so the anomaly disappears. 
+    #daymachinediff has issues in region 25. policy 1 maintains its ratio relative to the other regions, so it implies that those which are going down are being completely wiped out with a power outage or other mishap, rather than there being some general unhealth in the region. Also seems to be unrelated to the virus instance since the other regions are unaffected by machines going down during hte day. Likewise, region 25 gets it first virus symptoms 2.5 hours after the episode of machines being down is over. Of course this is obscured by the fact that end of day occurs and machines are supposed to be down, so the anomaly disappears. 
     #@colPick = ['pol5', 'pol4', 'pol3','pol2']
   
     #headquarters has increased activity flags after business hours over the timeperiod
@@ -48,39 +48,37 @@ class HeatMap
     #region 5 and 10 increased pol2
     #@colPick = ['pol2']
     #maintenance issue
-    #@colPick = ['act2']
+#    @colPick = ['act2']
     #virus
     #@colPick = ['pol5']
     # machine online deviations from expected. headquarters, region 25. Headquarters has more machines online than expected the whole time!
-    #colPick = ['erspreadmax']
-    #colPick = ['erspreadmin']
-    @colPick = ['erspreadmax', 'erspreadmin']
+    #colPick = ['nightmachinediff']
+    #colPick = ['daymachinediff']
+    #@colPick = ['nightmachinediff', 'daymachinediff']
 
     @scales = {}
     @palette = {
       sumnumconnections: 'green'
-      erspreadmax: 'red'
-      erspreadmin: 'blue'
+      nightmachinediff: 'red'
+      daymachinediff: 'blue'
       showregion: 'red'
       showtime: 'red'
-      pol1: '#a6cee3'
-      pol2: 'orange'
-      pol3: 'blue'
-      pol4: '#33a02c'
-      pol5: '#e31a1c'
-      act1: '#b2df8a'
-      act2: '#fb9a99'
-      act3: '#1f78b4'
-      act4: '#ff7f00'
-      act5: '#6a3d9a'
+      pol1: '#1f77b4'
+      pol2: '#ff7f0e'
+      pol3: '#2ca02c'
+      pol4: '#9467bd'
+      pol5: '#d62728'
+      act1: '#8c564b'
+      act2: '#e377c2'
+      act3: '#7f7f7f'
+      act4: '#bcbd22'
+      act5: '#17becf'
     }
 
-    #@regions = ["headquarters-1", "region-1", "region-2", "region-3", "region-4", "region-5", "region-6", "region-7", "region-8", "region-9", "region-10", "region-11", "region-12", "region-13", "region-14", "region-15", "region-16", "region-17", "region-18", "region-19", "region-20", "region-21", "region-22", "region-23", "region-24", "region-25", "region-26", "region-27", "region-28", "region-29", "region-30", "region-31", "region-32", "region-33", "region-34", "region-35", "region-36", "region-37", "region-38", "region-39", "region-40", "region-41", "region-42", "region-43", "region-44", "region-45", "region-46", "region-47", "region-48", "region-49", "region-50"]
 
     @regions = ["s-35", "s-34", "L-2", "s-36", "s-11", "L-1", "s-37", "s-49", "s-41", "s-50", "s-33", "s-32", "s-48", "s-39", "s-47", "s-46", "L-8", "s-12", "s-43", "s-13", "s-44", "s-31", "L-9", "s-45", "s-40", "L-3", "s-42", "L-10", "s-14", "s-30", "L-6", "s-15","s-29", "s-17", "s-16", "s-38", "s-20", "L-5", "s-18", "s-19", "HEAD", "L-7", "s-27", "s-28", "s-23", "L-4", "s-22", "s-21", "s-26", "s-24", "s-25"]
 
-#        @regions = ["region-35", "region-34", "region-2", "region-36", "region-11", "region-1", "region-37", "region-49", "region-41", "region-50", "region-33", "region-32", "region-48", "region-39", "region-47", "region-46", "region-8", "region-12", "region-43", "region-13", "region-44", "region-31", "region-9", "region-45", "region-40", "region-3", "region-42", "region-10", "region-14", "region-30", "region-6", "region-15","region-29", "region-17", "region-16", "region-38", "region-20", "region-5", "region-18", "region-19", "headquarters-1", "region-7", "region-27", "region-28", "region-23", "region-4", "region-22", "region-21", "region-26", "region-24", "region-25"]
-
+#    @regions = ["HEAD", "L-1", "L-2", "L-3", "L-4", "L-5", "L-6", "L-7", "L-8", "L-9", "L-10", "s-11", "s-12", "s-13", "s-14", "s-15", "s-16", "s-17", "s-18", "s-19", "s-20", "s-21", "s-22", "s-23", "s-24", "s-25", "s-26", "s-27", "s-28", "s-29", "s-30", "s-31", "s-32", "s-33", "s-34", "s-35", "s-36", "s-37", "s-38", "s-39", "s-40", "s-41", "s-42", "s-43", "s-44", "s-45", "s-46", "s-47", "s-48", "s-49", "s-50"]
     
     @times = ['2012-02-01 23:00:00','2012-02-01 23:15:00','2012-02-01 23:30:00','2012-02-01 23:45:00','2012-02-02 00:00:00','2012-02-02 00:15:00','2012-02-02 00:30:00','2012-02-02 00:45:00','2012-02-02 01:00:00','2012-02-02 01:15:00','2012-02-02 01:30:00','2012-02-02 01:45:00','2012-02-02 02:00:00','2012-02-02 02:15:00','2012-02-02 02:30:00','2012-02-02 02:45:00','2012-02-02 03:00:00','2012-02-02 03:15:00','2012-02-02 03:30:00','2012-02-02 03:45:00','2012-02-02 04:00:00','2012-02-02 04:15:00','2012-02-02 04:30:00','2012-02-02 04:45:00','2012-02-02 05:00:00','2012-02-02 05:15:00','2012-02-02 05:30:00','2012-02-02 05:45:00','2012-02-02 06:00:00','2012-02-02 06:15:00','2012-02-02 06:30:00','2012-02-02 06:45:00','2012-02-02 07:00:00','2012-02-02 07:15:00','2012-02-02 07:30:00','2012-02-02 07:45:00','2012-02-02 08:00:00','2012-02-02 08:15:00','2012-02-02 08:30:00','2012-02-02 08:45:00','2012-02-02 09:00:00','2012-02-02 09:15:00','2012-02-02 09:30:00','2012-02-02 09:45:00','2012-02-02 10:00:00','2012-02-02 10:15:00','2012-02-02 10:30:00','2012-02-02 10:45:00','2012-02-02 11:00:00','2012-02-02 11:15:00','2012-02-02 11:30:00','2012-02-02 11:45:00','2012-02-02 12:00:00','2012-02-02 12:15:00','2012-02-02 12:30:00','2012-02-02 12:45:00','2012-02-02 13:00:00','2012-02-02 13:15:00','2012-02-02 13:30:00','2012-02-02 13:45:00','2012-02-02 14:00:00','2012-02-02 14:15:00','2012-02-02 14:30:00','2012-02-02 14:45:00','2012-02-02 15:00:00','2012-02-02 15:15:00','2012-02-02 15:30:00','2012-02-02 15:45:00','2012-02-02 16:00:00','2012-02-02 16:15:00','2012-02-02 16:30:00','2012-02-02 16:45:00','2012-02-02 17:00:00','2012-02-02 17:15:00','2012-02-02 17:30:00','2012-02-02 17:45:00','2012-02-02 18:00:00','2012-02-02 18:15:00','2012-02-02 18:30:00','2012-02-02 18:45:00','2012-02-02 19:00:00','2012-02-02 19:15:00','2012-02-02 19:30:00','2012-02-02 19:45:00','2012-02-02 20:00:00','2012-02-02 20:15:00','2012-02-02 20:30:00','2012-02-02 20:45:00','2012-02-02 21:00:00','2012-02-02 21:15:00','2012-02-02 21:30:00','2012-02-02 21:45:00','2012-02-02 22:00:00','2012-02-02 22:15:00','2012-02-02 22:30:00','2012-02-02 22:45:00','2012-02-02 23:00:00','2012-02-02 23:15:00','2012-02-02 23:30:00','2012-02-02 23:45:00','2012-02-03 00:00:00','2012-02-03 00:15:00','2012-02-03 00:30:00','2012-02-03 00:45:00','2012-02-03 01:00:00','2012-02-03 01:15:00','2012-02-03 01:30:00','2012-02-03 01:45:00','2012-02-03 02:00:00','2012-02-03 02:15:00','2012-02-03 02:30:00','2012-02-03 02:45:00','2012-02-03 03:00:00','2012-02-03 03:15:00','2012-02-03 03:30:00','2012-02-03 03:45:00','2012-02-03 04:00:00','2012-02-03 04:15:00','2012-02-03 04:30:00','2012-02-03 04:45:00','2012-02-03 05:00:00','2012-02-03 05:15:00','2012-02-03 05:30:00','2012-02-03 05:45:00','2012-02-03 06:00:00','2012-02-03 06:15:00','2012-02-03 06:30:00','2012-02-03 06:45:00','2012-02-03 07:00:00','2012-02-03 07:15:00','2012-02-03 07:30:00','2012-02-03 07:45:00','2012-02-03 08:00:00','2012-02-03 08:15:00','2012-02-03 08:30:00','2012-02-03 08:45:00','2012-02-03 09:00:00','2012-02-03 09:15:00','2012-02-03 09:30:00','2012-02-03 09:45:00','2012-02-03 10:00:00','2012-02-03 10:15:00','2012-02-03 10:30:00','2012-02-03 10:45:00','2012-02-03 11:00:00','2012-02-03 11:15:00','2012-02-03 11:30:00','2012-02-03 11:45:00','2012-02-03 12:00:00','2012-02-03 12:15:00','2012-02-03 12:30:00','2012-02-03 12:45:00','2012-02-03 13:00:00','2012-02-03 13:15:00','2012-02-03 13:30:00','2012-02-03 13:45:00','2012-02-03 14:00:00','2012-02-03 14:15:00','2012-02-03 14:30:00','2012-02-03 14:45:00','2012-02-03 15:00:00','2012-02-03 15:15:00','2012-02-03 15:30:00','2012-02-03 15:45:00','2012-02-03 16:00:00','2012-02-03 16:15:00','2012-02-03 16:30:00','2012-02-03 16:45:00','2012-02-03 17:00:00','2012-02-03 17:15:00','2012-02-03 17:30:00','2012-02-03 17:45:00','2012-02-03 18:00:00','2012-02-03 18:15:00','2012-02-03 18:30:00','2012-02-03 18:45:00','2012-02-03 19:00:00','2012-02-03 19:15:00','2012-02-03 19:30:00','2012-02-03 19:45:00','2012-02-03 20:00:00','2012-02-03 20:15:00','2012-02-03 20:30:00','2012-02-03 20:45:00','2012-02-03 21:00:00','2012-02-03 21:15:00','2012-02-03 21:30:00','2012-02-03 21:45:00','2012-02-03 22:00:00','2012-02-03 22:15:00','2012-02-03 22:30:00','2012-02-03 22:45:00','2012-02-03 23:00:00','2012-02-03 23:15:00','2012-02-03 23:30:00','2012-02-03 23:45:00','2012-02-04 00:00:00','2012-02-04 00:15:00','2012-02-04 00:30:00','2012-02-04 00:45:00','2012-02-04 01:00:00','2012-02-04 01:15:00','2012-02-04 01:30:00','2012-02-04 01:45:00','2012-02-04 02:00:00','2012-02-04 02:15:00','2012-02-04 02:30:00','2012-02-04 02:45:00','2012-02-04 03:00:00','2012-02-04 03:15:00','2012-02-04 03:30:00','2012-02-04 03:45:00','2012-02-04 04:00:00','2012-02-04 04:15:00','2012-02-04 04:30:00','2012-02-04 04:45:00','2012-02-04 05:00:00','2012-02-04 05:15:00','2012-02-04 05:30:00','2012-02-04 05:45:00','2012-02-04 06:00:00','2012-02-04 06:15:00','2012-02-04 06:30:00','2012-02-04 06:45:00','2012-02-04 07:00:00','2012-02-04 07:15:00','2012-02-04 07:30:00','2012-02-04 07:45:00','2012-02-04 08:00:00']
 
@@ -115,12 +113,16 @@ class HeatMap
     d3.select(@parent).select("#heat_pol_button").remove()
     d3.select(@parent).select("#heat_data_button").remove()
 
-    color_scale = d3.scale.category10().domain(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
-    button = d3.select(@parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
+#    color_scale = d3.scale.category10().domain(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
+    
+      
+
+    
+    button = d3.select(@parent).append("div").attr("id", "heat_pol_button").selectAll("button").data(@choices)#.data(["pol1", "pol2", "pol3", "pol4","pol5", "act1", "act2", "act3", "act4","act5"])
     .enter().append('button').attr("type", "button").attr(
       class: "btn btn-xs"
       id: (d) -> d
-    ).style('background-color', (d) -> color_scale(d)).text((d) -> d)
+    ).style('background-color', (d) => @palette[d]).text((d)->d)
 
     local_global_button = d3.select(@parent).append("div").attr("id", "heat_data_button").selectAll('button').data(["local", "global"]).enter().append('button').attr("type", "button")
     .attr(
@@ -210,7 +212,7 @@ class HeatMap
 
     showtime = (d)=>
       svgHeat.append('text')
-        .text(d.toTimeString()[0..8])
+        .text(d.toTimeString()[0..4])
         .attr(
           id: 'showtime'
           x: 0
@@ -218,7 +220,7 @@ class HeatMap
           stroke: @palette['showtime']
           fill: 'black'
           "font-size": 25
-          "transform": "translate(#{@padding/3.5},0)"
+          "transform": "translate(#{@padding/2.5},0)"
         )
 
     showregion = (region)=>
@@ -246,6 +248,7 @@ class HeatMap
             xScaleHeat d['region']
           y: (d)->
             yScaleHeat d['timestamp']
+          rx: 2
           width: @innerRectWidth-1
           height: rectHeight - 2*@barPadding
           transform: (d)=>
@@ -257,9 +260,9 @@ class HeatMap
         .style("opacity": (d)=>
 #          if @colPick[i] is 'erspread'
 #            if +d[@colPick[i]] > 0
-#              @scales['erspreadmax'] (+d[@colPick[i]])/d.sizepol
+#              @scales['nightmachinediff'] (+d[@colPick[i]])/d.sizepol
 #            else
-#              @scales['erspreadmin'] (+d[@colPick[i]])/d.sizepol
+#              @scales['daymachinediff'] (+d[@colPick[i]])/d.sizepol
 #          else
             if +d[@colPick[i]]
               @scales[@colPick[i]] +d[@colPick[i]]/d.sizepol
@@ -286,7 +289,7 @@ class HeatMap
       .selectAll('text')
 #        .style("text-anchor", "right")
         .attr(
-          "transform": "translate(#{-@rectWidth},40) rotate(-90)"
+          "transform": "translate(#{-@rectWidth/1.5},40) rotate(-90)"
           "font-size": 20
   #        "transform","translate(#{-innerRectWidth/2}, 0)"
         )
@@ -297,25 +300,26 @@ class HeatMap
           class: 'axis'
           "stroke-width": 1
           stroke: 'black'
+          "font-size": 20
           "transform": "translate(#{@padding},0)"
         ).style('opacity': 0.8)
 
 
-    xGrid = svgHeat.selectAll('.xgrid')
-      .data(@regions)
-      .enter()
-      .append('line')
-      .attr(
-        x1: (d)->
-          xScaleHeat d
-        x2: (d)->
-          xScaleHeat d
-        y1: @padding
-        y2: @height-@padding
-        stroke: 'black'
-        )
-        .style(
-          opacity: 0.5)
+#    xGrid = svgHeat.selectAll('.xgrid')
+#      .data(@regions)
+#      .enter()
+#      .append('line')
+#      .attr(
+#        x1: (d)->
+#          xScaleHeat d
+#        x2: (d)->
+#          xScaleHeat d
+#        y1: @padding
+#        y2: @height-@padding
+#        stroke: 'black'
+#        )
+#        .style(
+#          opacity: 0.5)
 
 #    yGrid = svgHeat.selectAll('line')
 #      .data(dataset2)
