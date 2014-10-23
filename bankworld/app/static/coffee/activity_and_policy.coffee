@@ -23,7 +23,7 @@ class MultiTimeSeriesPolicyChart
       @curregion = region
     else
       region = @curregion
-    color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p5", "p4", "a1", "a2", "a3", "a4","a5"])
+    color_scale = d3.scale.category10().domain(["p1", "p2", "p3", "p4", "p5", "a1", "a2", "a3", "a4","a5"])
     button = d3.select(@parent).selectAll("button").data(["p1", "p2", "p3", "p4","p5", "a1", "a2", "a3", "a4","a5"])
     .enter().append('button').attr("type", "button").attr(
       class: "btn btn-xs"
